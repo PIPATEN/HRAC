@@ -36,7 +36,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            /* Hide initially */
+            /* Hide initially to prevent a flash of empty space */
             display: none; 
         }
         /* --- END ANNOUNCEMENT STYLES --- */
@@ -87,34 +87,34 @@
 
 <script>
     /**
-     * Loads the announcement text from the deployed Google Apps Script API endpoint.
+     * Loads the announcement text from the separate 'announcement.txt' file 
+     * and inserts it into the announcement bar.
      */
     async function loadAnnouncement() {
         const announcementBar = document.getElementById('announcementBar');
-        
-        // 🚀 FINAL WORKING URL
-        const announcementAPI = 'https://script.google.com/macros/s/AKfycbx0UOLZNtQPNRk-4yij35L6XkxqRvXNNfnCj5AR6Psy5JAKxMzh5aI2kWFZ9WQEm-AxaQ/exec'; 
+        // 🔑 The path is set to the local file within the 'file' folder.
+        const announcementFile = 'file/announcement.txt'; 
 
         try {
-            const response = await fetch(announcementAPI);
+            const response = await fetch(announcementFile);
             
+            // Check if the file was found and the fetch was successful
             if (response.ok) {
-                // Parse the response as JSON (even though the script returns HtmlOutput, the content is JSON)
-                const data = await response.json();
+                // Get the text content from the file
+                const text = await response.text();
                 
-                // Get the announcement text from the 'announcement' key
-                const text = data.announcement;
-
-                // Insert the text and make it visible ONLY if the text is not empty
+                // Only display the bar if the file contains text
                 if (text && text.trim().length > 0) {
                     announcementBar.innerHTML = text.trim();
                     announcementBar.style.display = 'block';
                 }
 
             } else {
-                console.warn(`Announcement API failed to load: ${response.status}`);
+                // If the file is missing or empty, simply hide the bar
+                console.warn(`Announcement file not found or failed to load: ${response.status}`);
             }
         } catch (error) {
+            // Handle network or other errors silently
             console.error('Error fetching announcement:', error);
         }
     }
