@@ -7,7 +7,8 @@
     <style>
         /* Define the height of the announcement bar once */
         :root {
-            --announcement-height: 50px; /* Adjust this value if your padding is off */
+            --announcement-height: 50px; /* Height of the fixed bar */
+            --scroll-speed: 25s; /* Time for the text to scroll once */
         }
         
         /* Basic styling for centering and making the button clear */
@@ -16,7 +17,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Remove height: 100vh and justify-content: center for scrollable content */
             margin: 0;
             background-color: #f4f4f9;
             /* CRITICAL FIX 1: Add padding-top to the body equal to the announcement bar's height. */
@@ -28,14 +28,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Start content from the top of the padded area */
+            justify-content: flex-start;
             width: 100%;
         }
 
         h1 {
             color: #333;
             margin-bottom: 40px;
-            /* Ensure the header is the first thing in the content flow */
             margin-top: 40px; 
         }
 
@@ -44,24 +43,46 @@
             width: 100%;
             background-color: #ffc107; 
             color: #333;
-            text-align: center;
-            padding: 15px 0;
             font-size: 1.2em;
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             
-            /* CRITICAL FIX 2: Use fixed positioning instead of absolute */
             position: fixed; 
             top: 0;
             left: 0;
-            z-index: 1000; /* Ensure it stays on top of all content */
-            height: var(--announcement-height); /* Set a fixed height */
-            line-height: 20px; /* Vertically center the text within the bar */
-            box-sizing: border-box; /* Include padding in the height calculation */
+            z-index: 1000;
+            height: var(--announcement-height); 
+            line-height: var(--announcement-height); /* Vertically center text */
+            box-sizing: border-box; 
             
-            /* Hide initially */
+            /* KEY FOR SCROLLING: Clip any content that goes beyond the bar's width */
+            overflow: hidden; 
+            white-space: nowrap; /* Prevent text from wrapping */
+            
             display: none; 
         }
+
+        /* The element that actually scrolls */
+        .announcement-text {
+            /* Position text far off the right side initially */
+            display: inline-block;
+            padding-left: 100%; 
+            
+            /* Apply the animation */
+            animation: scroll-left var(--scroll-speed) linear infinite;
+        }
+
+        /* Define the animation */
+        @keyframes scroll-left {
+            0%   { transform: translateX(0); } /* Start position: far right */
+            100% { transform: translateX(-100%); } /* End position: scrolls left until it disappears */
+        }
+
+        /* Pause animation on hover for desktop users to read */
+        .announcement-bar:hover .announcement-text {
+            animation-play-state: paused;
+        }
+
         /* --- END ANNOUNCEMENT STYLES --- */
 
 
@@ -115,7 +136,7 @@
 <script>
     /**
      * Loads the announcement text from the separate 'announcement.txt' file 
-     * and inserts it into the announcement bar.
+     * and inserts it into the announcement bar inside the scrolling element.
      */
     async function loadAnnouncement() {
         const announcementBar = document.getElementById('announcementBar');
@@ -129,12 +150,11 @@
                 
                 // Only display the bar if the file contains text
                 if (text && text.trim().length > 0) {
-                    announcementBar.innerHTML = text.trim();
-                    announcementBar.style.display = 'block';
+                    const announcementText = text.trim();
                     
-                    // OPTIONAL: If the bar height calculation is still slightly off, 
-                    // you can dynamically adjust the body padding here:
-                    // document.body.style.paddingTop = announcementBar.offsetHeight + 'px';
+                    // 🔑 CRITICAL: Insert the text inside the new scrolling element
+                    announcementBar.innerHTML = `<span class="announcement-text">${announcementText}</span>`;
+                    announcementBar.style.display = 'block';
                 }
             } else {
                 console.warn(`Announcement file not found or failed to load: ${response.status}`);
