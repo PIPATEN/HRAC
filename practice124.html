@@ -116,6 +116,26 @@
         }
         /* --- END MODAL STYLES --- */
     </style>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script>
+    // 🔑 REPEAT your Firebase config keys here 🔑
+    const firebaseConfig = {
+        apiKey: "AIzaSyDommZvHGnuYW7iUkHFcc9zb8id-0PGrX8",
+        authDomain: "hrac-2bcbb.firebaseapp.com",
+        projectId: "hrac-2bcbb",
+        storageBucket: "hrac-2bcbb.firebasestorage.app",
+        messagingSenderId: "265024746847",
+        appId: "1:265024746847:web:07f48991e018086ca772ea",
+        measurementId: "G-K42TBV90PJ"
+    };
+
+    // Initialize Firebase, Auth, and Firestore
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore(); 
+</script>
 </head>
 <body>
     
@@ -149,6 +169,22 @@
         </div>
     </div>
     <script>
+        // --- 🔑 NEW: AUTHENTICATION CHECK AND PROTECTION 🔑 ---
+        // This runs the moment the script loads and checks if the user is signed in.
+        auth.onAuthStateChanged((user) => {
+            // If user is null (not logged in)
+            if (!user) {
+                // IMPORTANT: Use a short delay before redirecting to allow the alert to show
+                setTimeout(() => {
+                    alert("You must be logged in to access the quiz packages.");
+                    window.location.href = './login.html';
+                }, 100); 
+                
+            } 
+            // If the user is logged in, the script continues and loads the content normally.
+        });
+        // --- END PROTECTION ---
+
         // Store the dynamic file paths and title temporarily
         let currentQuizData = {
             title: '',

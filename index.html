@@ -167,6 +167,53 @@
     // Call the function when the page loads
     loadAnnouncement();
 </script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script>
+    // 🔑 REPLACE with your actual Firebase config keys 🔑
+    const firebaseConfig = {
+        apiKey: "AIzaSyDommZvHGnuYW7iUkHFcc9zb8id-0PGrX8",
+  authDomain: "hrac-2bcbb.firebaseapp.com",
+  projectId: "hrac-2bcbb",
+  storageBucket: "hrac-2bcbb.firebasestorage.app",
+  messagingSenderId: "265024746847",
+  appId: "1:265024746847:web:07f48991e018086ca772ea",
+  measurementId: "G-K42TBV90PJ"
+    };
 
+    // Initialize Firebase and the services you need
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Attach the auth status monitor to the window object so it can be called globally
+    window.onload = function() {
+        const loginStatus = document.createElement('div');
+        loginStatus.id = 'loginStatus';
+        loginStatus.style.cssText = 'position: fixed; top: 15px; right: 20px; font-weight: bold; z-index: 1000;';
+        document.body.appendChild(loginStatus);
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in
+                // Note: We'll need a login.html page eventually.
+                loginStatus.innerHTML = `Welcome, ${user.email}! <a href="#" onclick="logout()">Logout</a>`;
+            } else {
+                // User is signed out
+                loginStatus.innerHTML = `<a href="./login.html" style="color: #007bff;">Login/Signup</a>`;
+            }
+        });
+    };
+
+    function logout() {
+        auth.signOut().then(() => {
+            // Sign-out successful.
+            window.location.href = './index.html'; 
+        }).catch((error) => {
+            console.error("Logout failed:", error);
+            alert("Logout failed: " + error.message);
+        });
+    }
+</script>
 </body>
 </html>

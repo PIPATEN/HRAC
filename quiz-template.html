@@ -124,6 +124,25 @@
         .hidden { display: none; }
         #loadingMessage { padding: 20px; text-align: center; font-size: 1.2em; color: #007bff; }
     </style>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script>
+    // 🔑 REPEAT your Firebase config keys here 🔑
+    const firebaseConfig = {
+        apiKey: "AIzaSyDommZvHGnuYW7iUkHFcc9zb8id-0PGrX8",
+        authDomain: "hrac-2bcbb.firebaseapp.com",
+        projectId: "hrac-2bcbb",
+        storageBucket: "hrac-2bcbb.firebasestorage.app",
+        messagingSenderId: "265024746847",
+        appId: "1:265024746847:web:07f48991e018086ca772ea",
+        measurementId: "G-K42TBV90PJ"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore(); 
+</script>
 </head>
 <body>
 
@@ -382,6 +401,36 @@
             detailedResults.appendChild(resultItem);
         });
 
+        // =========================================================
+        // 🚀 NEW: FIRESTORE DATABASE SAVE 🚀
+        // =========================================================
+        const user = firebase.auth().currentUser;
+        
+        if (user) {
+            const totalQuestions = quizData.length;
+            const currentScore = score;
+            // Extract the quiz title from the URL parameters
+            const quizTitle = new URLSearchParams(window.location.search).get('title');
+            
+            db.collection('scores').add({
+                userId: user.uid,              
+                email: user.email,             
+                quizTitle: quizTitle,
+                score: currentScore,
+                total: totalQuestions,
+                mode: 'Full Test',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+            })
+            .then(() => {
+                console.log("Full Test score successfully written to database!");
+            })
+            .catch((error) => {
+                console.error("Error writing score: ", error);
+            });
+        } else {
+            console.warn("User not logged in. Score not saved.");
+        }
+        // =========================================================
         // Final Score Display
         scoreText.textContent = `You got ${score} out of ${quizData.length} questions correct!`;
         
