@@ -36,7 +36,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            /* Hide initially to prevent a flash of empty space */
+            /* Hide initially */
             display: none; 
         }
         /* --- END ANNOUNCEMENT STYLES --- */
@@ -88,26 +88,24 @@
 <script>
     /**
      * Loads the announcement text from the deployed Google Apps Script API endpoint.
-     * The script reads cell A1 from a Google Sheet and returns it as a JSON object.
      */
     async function loadAnnouncement() {
         const announcementBar = document.getElementById('announcementBar');
         
-        // This is the correct, full Execution URL provided in the last step.
-        const announcementAPI = 'https://script.google.com/macros/s/AKfycbycTNc_LDJKxY3RjinJk0PWZsSoSYgJXYpYg51CeQAQRjtlLQv0ALBq_paKMkwdPUMKjw/exec'; 
+        // 🚀 FINAL WORKING URL
+        const announcementAPI = 'https://script.google.com/macros/s/AKfycbx0UOLZNtQPNRk-4yij35L6XkxqRvXNNfnCj5AR6Psy5JAKxMzh5aI2kWFZ9WQEm-AxaQ/exec'; 
 
         try {
             const response = await fetch(announcementAPI);
             
-            // Check if the fetch was successful
             if (response.ok) {
-                // Parse the response as JSON
+                // Parse the response as JSON (even though the script returns HtmlOutput, the content is JSON)
                 const data = await response.json();
                 
                 // Get the announcement text from the 'announcement' key
                 const text = data.announcement;
 
-                // Insert the text into the div and make it visible ONLY if the text is not empty
+                // Insert the text and make it visible ONLY if the text is not empty
                 if (text && text.trim().length > 0) {
                     announcementBar.innerHTML = text.trim();
                     announcementBar.style.display = 'block';
@@ -117,7 +115,6 @@
                 console.warn(`Announcement API failed to load: ${response.status}`);
             }
         } catch (error) {
-            // Handle network or other errors silently
             console.error('Error fetching announcement:', error);
         }
     }
