@@ -5,45 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRAC question practicing page</title>
     <style>
+        /* Define the height of the announcement bar once */
+        :root {
+            --announcement-height: 50px; /* Adjust this value if your padding is off */
+        }
+        
         /* Basic styling for centering and making the button clear */
         body {
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            /* Remove height: 100vh and justify-content: center for scrollable content */
             margin: 0;
             background-color: #f4f4f9;
+            /* CRITICAL FIX 1: Add padding-top to the body equal to the announcement bar's height. */
+            padding-top: var(--announcement-height); 
+        }
+        
+        /* Reset positioning for the main content block */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Start content from the top of the padded area */
+            width: 100%;
         }
 
         h1 {
             color: #333;
             margin-bottom: 40px;
+            /* Ensure the header is the first thing in the content flow */
+            margin-top: 40px; 
         }
 
         /* --- ANNOUNCEMENT STYLES --- */
         .announcement-bar {
             width: 100%;
-            background-color: #ffc107; /* Bright yellow/orange background for visibility */
+            background-color: #ffc107; 
             color: #333;
             text-align: center;
             padding: 15px 0;
-            margin-bottom: 30px; /* Space below the announcement */
             font-size: 1.2em;
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: absolute;
+            
+            /* CRITICAL FIX 2: Use fixed positioning instead of absolute */
+            position: fixed; 
             top: 0;
             left: 0;
-            /* Hide initially to prevent a flash of empty space */
+            z-index: 1000; /* Ensure it stays on top of all content */
+            height: var(--announcement-height); /* Set a fixed height */
+            line-height: 20px; /* Vertically center the text within the bar */
+            box-sizing: border-box; /* Include padding in the height calculation */
+            
+            /* Hide initially */
             display: none; 
         }
         /* --- END ANNOUNCEMENT STYLES --- */
 
 
         .hvac-button {
-            /* Style to make it look like a prominent button */
             padding: 15px 30px;
             font-size: 20px;
             font-weight: bold;
@@ -66,24 +88,29 @@
             display: flex;
             gap: 20px;
         }
-
-        body {
-            padding-top: 60px;
-            justify-content: flex-start;
+        
+        /* Mobile-first adjustment for smaller screens */
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
-
     </style>
 </head>
 <body>
 
     <div id="announcementBar" class="announcement-bar">
         </div>
-    <h1>HRAC question practicing page</h1>
-	 
-    <div class="button-group">	
-        <a href="./practice124.html" class="hvac-button">HRAC 124</a>
-	    <a href="./practice113.html" class="hvac-button">HRAC 113</a>
-	</div>
+
+    <div class="main-content">
+        <h1>HRAC question practicing page</h1>
+         
+        <div class="button-group">	
+            <a href="./practice124.html" class="hvac-button">HRAC 124</a>
+            <a href="./practice113.html" class="hvac-button">HRAC 113</a>
+        </div>
+    </div>
 
 <script>
     /**
@@ -92,29 +119,27 @@
      */
     async function loadAnnouncement() {
         const announcementBar = document.getElementById('announcementBar');
-        // 🔑 The path is set to the local file within the 'file' folder.
         const announcementFile = 'file/announcement.txt'; 
 
         try {
             const response = await fetch(announcementFile);
             
-            // Check if the file was found and the fetch was successful
             if (response.ok) {
-                // Get the text content from the file
                 const text = await response.text();
                 
                 // Only display the bar if the file contains text
                 if (text && text.trim().length > 0) {
                     announcementBar.innerHTML = text.trim();
                     announcementBar.style.display = 'block';
+                    
+                    // OPTIONAL: If the bar height calculation is still slightly off, 
+                    // you can dynamically adjust the body padding here:
+                    // document.body.style.paddingTop = announcementBar.offsetHeight + 'px';
                 }
-
             } else {
-                // If the file is missing or empty, simply hide the bar
                 console.warn(`Announcement file not found or failed to load: ${response.status}`);
             }
         } catch (error) {
-            // Handle network or other errors silently
             console.error('Error fetching announcement:', error);
         }
     }
