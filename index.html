@@ -22,32 +22,109 @@
             margin-bottom: 40px;
         }
 
+        /* --- ANNOUNCEMENT STYLES --- */
+        .announcement-bar {
+            width: 100%;
+            background-color: #ffc107; /* Bright yellow/orange background for visibility */
+            color: #333;
+            text-align: center;
+            padding: 15px 0;
+            margin-bottom: 30px; /* Space below the announcement */
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* Hide initially to prevent a flash of empty space */
+            display: none; 
+        }
+        /* --- END ANNOUNCEMENT STYLES --- */
+
+
         .hvac-button {
             /* Style to make it look like a prominent button */
             padding: 15px 30px;
             font-size: 20px;
             font-weight: bold;
-            text-decoration: none; /* Removes the underline from the link */
+            text-decoration: none;
             color: white;
-            background-color: #007bff; /* Primary blue color */
+            background-color: #007bff;
             border-radius: 8px;
             transition: background-color 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border: none;
             cursor: pointer;
+            margin: 10px; 
         }
 
         .hvac-button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
+            background-color: #0056b3;
         }
+        
+        .button-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        body {
+            padding-top: 60px;
+            justify-content: flex-start;
+        }
+
     </style>
 </head>
 <body>
 
+    <div id="announcementBar" class="announcement-bar">
+        </div>
     <h1>HRAC question practicing page</h1>
-	 <div class="button-group">	
-    <a href="./practice124.html" class="hvac-button">HRAC 124</a>
-	<a href="./practice113.html" class="hvac-button">HRAC 113</a>
+	 
+    <div class="button-group">	
+        <a href="./practice124.html" class="hvac-button">HRAC 124</a>
+	    <a href="./practice113.html" class="hvac-button">HRAC 113</a>
 	</div>
+
+<script>
+    /**
+     * Loads the announcement text from the deployed Google Apps Script API endpoint.
+     * The script reads cell A1 from a Google Sheet and returns it as a JSON object.
+     */
+    async function loadAnnouncement() {
+        const announcementBar = document.getElementById('announcementBar');
+        
+        // This is the correct, full Execution URL provided in the last step.
+        const announcementAPI = 'https://script.google.com/macros/s/AKfycbycTNc_LDJKxY3RjinJk0PWZsSoSYgJXYpYg51CeQAQRjtlLQv0ALBq_paKMkwdPUMKjw/exec'; 
+
+        try {
+            const response = await fetch(announcementAPI);
+            
+            // Check if the fetch was successful
+            if (response.ok) {
+                // Parse the response as JSON
+                const data = await response.json();
+                
+                // Get the announcement text from the 'announcement' key
+                const text = data.announcement;
+
+                // Insert the text into the div and make it visible ONLY if the text is not empty
+                if (text && text.trim().length > 0) {
+                    announcementBar.innerHTML = text.trim();
+                    announcementBar.style.display = 'block';
+                }
+
+            } else {
+                console.warn(`Announcement API failed to load: ${response.status}`);
+            }
+        } catch (error) {
+            // Handle network or other errors silently
+            console.error('Error fetching announcement:', error);
+        }
+    }
+
+    // Call the function when the page loads
+    loadAnnouncement();
+</script>
+
 </body>
 </html>

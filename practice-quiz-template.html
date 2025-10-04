@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Quiz</title> 
+    <title>Dynamic Practice Quiz</title> 
     <style>
-        /* CSS styles from your original quiz page */
+        /* Base Styles */
         body { 
             font-family: Arial, sans-serif; 
             margin: 20px; 
-            background-color: #f4ff4; 
+            background-color: #f4f4f9; 
             color: #333; 
         }
         
-        /* NEW STYLES for the Back Link */
         .back-link {
             position: absolute; 
             top: 20px;
@@ -31,7 +30,6 @@
         .back-link:hover {
             background-color: #e9ecef;
         }
-        /* END NEW STYLES */
 
         .container { 
             max-width: 700px; 
@@ -42,6 +40,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
         }
         h1 { text-align: center; color: #0056b3; }
+        .hidden { display: none; }
+        #loadingMessage { padding: 20px; text-align: center; font-size: 1.2em; color: #007bff; }
         
         /* --- PROGRESS BAR STYLES --- */
         #progressBarContainer {
@@ -56,7 +56,7 @@
         #progressBar {
             height: 100%;
             width: 0%;
-            background-color: #28a745; /* Green color for progress */
+            background-color: #28a745; 
             transition: width 0.3s ease-in-out;
             text-align: right;
             line-height: 15px;
@@ -65,13 +65,14 @@
             padding-right: 5px;
             box-sizing: border-box;
         }
-        /* --- END PROGRESS BAR STYLES --- */
+        /* --- QUESTION CARD STYLES --- */
 
         .question-card { 
             border: 1px solid #ddd; 
             padding: 20px; 
             margin-bottom: 15px; 
             border-radius: 6px; 
+            min-height: 200px; 
         }
         .question-card p { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; }
         .options label { 
@@ -84,45 +85,68 @@
             transition: background-color 0.2s; 
             position: relative;
         }
-        .options label:hover { background-color: #eef; }
+        .options label:hover:not(.disabled) { background-color: #eef; }
         
-        /* Visually hide the radio button but keep it functional for selection */
+        /* Radio Button Styling */
         .options input[type="radio"] { 
             position: absolute;
             opacity: 0;
             cursor: pointer;
         }
         
-        /* Highlight the selected option */
-        .options input[type="radio"]:checked ~ span {
+        /* CORRECT: Selected Correct Answer (Green) */
+        .options input[type="radio"]:checked + span {
             font-weight: bold;
             color: white;
-            background-color: #007bff; /* Highlight background */
+            background-color: #28a745; 
             display: block;
             padding: 10px;
-            margin: -10px; /* Offset margin to cover the whole label area */
+            margin: -10px; 
             border-radius: 4px;
         }
-        /* Make the span fill the label when checked */
-        .options input[type="radio"]:checked + span {
-            color: inherit; /* Reset color for the span */
-            font-weight: normal; /* Reset font weight for the span */
+        
+        /* CORRECTED: Selected Incorrect Answer (Red) */
+        .options input[type="radio"].incorrect:checked + span {
+            background-color: #dc3545; 
         }
 
-        /* Span to hold the option text */
+        /* Highlight Correct Answer (Yellow) on Error */
+        .highlight-correct {
+            background-color: #ffc107 !important; 
+            color: #333 !important;
+            font-weight: bold;
+        }
+
         .options label span { 
             display: block; 
-            padding: 0; /* Adjust padding here */
+            padding: 0; 
+        }
+
+        .disabled {
+            pointer-events: none; 
+            opacity: 0.8;
         }
         
+        /* --- QUIZ NAVIGATION BUTTON --- */
+        #nextQuestionBtn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        #nextQuestionBtn:hover {
+            background-color: #0056b3;
+        }
+        /* --- RESULTS STYLES --- */
         .results { margin-top: 30px; border-top: 2px solid #0056b3; padding-top: 20px; }
-        .result-item { padding: 10px; margin-bottom: 10px; border-radius: 4px; }
-        .correct { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
-        .incorrect { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
-        .correct-answer { font-weight: bold; color: #0056b3; margin-top: 5px; display: block; }
         .score { font-size: 1.5em; font-weight: bold; text-align: center; margin-bottom: 20px; color: #28a745; }
-        .hidden { display: none; }
-        #loadingMessage { padding: 20px; text-align: center; font-size: 1.2em; color: #007bff; }
     </style>
 </head>
 <body>
@@ -134,17 +158,19 @@
     <div id="progressBarContainer" class="hidden">
         <div id="progressBar"></div>
     </div>
+    
     <div id="loadingMessage">Loading quiz data...</div>
     
     <div id="quizContainer" class="hidden">
         </div>
 
+    <div class="quiz-navigation hidden" id="quizNavigation">
+        <button id="nextQuestionBtn" onclick="goToNextQuestion()">Next Question &rarr;</button>
+    </div>
     <div id="resultsContainer" class="results hidden">
-        <h2>Quiz Results</h2>
+        <h2>Practice Summary</h2>
         <p id="scoreText" class="score"></p>
-        <div id="detailedResults">
-            </div>
-        <button onclick="location.reload()" style="width: 100%; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px; margin-top: 20px;">Restart Quiz</button>
+        <button id="practiceAgainButton" style="width: 100%; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px; margin-top: 20px;">Practice Again (New Questions)</button>
     </div>
 </div>
 
@@ -153,37 +179,32 @@
     const urlParams = new URLSearchParams(window.location.search);
     const QUESTIONS_FILE = urlParams.get('qfile');
     const ANSWERS_FILE = urlParams.get('afile');
-    const QUIZ_TITLE = urlParams.get('title') || 'Dynamic Shuffling Quiz Game';
+    const QUIZ_TITLE = urlParams.get('title') || 'Dynamic Practice Quiz';
     
-    // Update the title elements
+    const QUESTION_LIMIT_PARAM = urlParams.get('limit');
+    let questionLimit = 0; 
+    if (QUESTION_LIMIT_PARAM === '10' || QUESTION_LIMIT_PARAM === '20') {
+        questionLimit = parseInt(QUESTION_LIMIT_PARAM);
+    }
+    
     document.title = QUIZ_TITLE;
     document.getElementById('quizTitle').textContent = QUIZ_TITLE;
 
-    if (!QUESTIONS_FILE || !ANSWERS_FILE) {
-        document.getElementById('loadingMessage').style.color = 'red';
-        document.getElementById('loadingMessage').textContent = 'CRITICAL ERROR: Missing question or answer file parameters in the URL.';
-        throw new Error('Missing URL parameters.');
-    }
-    // --- End Dynamic File Loading Setup ---
-
     let quizData = []; 
+    let allQuizData = []; 
     const optionMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
 
-    // Variables for single-question navigation
     let currentQuestionIndex = 0;
-    let userAnswers = []; // This array stores the user's selected answer for each question
+    let userAnswers = []; 
 
     const quizContainer = document.getElementById('quizContainer');
     const resultsContainer = document.getElementById('resultsContainer');
     const scoreText = document.getElementById('scoreText');
-    const detailedResults = document.getElementById('detailedResults');
     const loadingMessage = document.getElementById('loadingMessage');
-    
-    // NEW: Progress bar elements
     const progressBarContainer = document.getElementById('progressBarContainer');
     const progressBar = document.getElementById('progressBar');
-
-    // Utility function to shuffle array items (Fisher-Yates algorithm)
+    const quizNavigation = document.getElementById('quizNavigation');
+    
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -192,115 +213,88 @@
         return array;
     }
 
-    // Function to process the raw text files into the usable quizData structure (unchanged)
     function processTextData(questionText, answerText) {
-        // FIX: Use .replace(/\r/g, '') to handle Windows (CRLF) line endings before splitting.
         const lines = questionText.replace(/\r/g, '').split('\n').map(line => line.trim()).filter(line => line.length > 0);
         const answers = answerText.replace(/\r/g, '').split('\n').map(line => line.trim().toUpperCase()).filter(line => line.length > 0);
         
         const data = [];
         const numQuestions = Math.floor(lines.length / 5);
-
-        if (lines.length % 5 !== 0) {
-            throw new Error(`Question File Format Error: Total non-empty lines (${lines.length}) is not divisible by 5. Check for missing options or stray lines.`);
+        if (lines.length % 5 !== 0 || numQuestions !== answers.length) {
+            console.error(`Data Mismatch or Format Error. Lines: ${lines.length}, Answers: ${answers.length}`);
+            return [];
         }
         
-        if (numQuestions !== answers.length) {
-            throw new Error(`Data Mismatch: Found ${numQuestions} questions but ${answers.length} answers. Check file formats.`);
-        }
-
         for (let i = 0; i < numQuestions; i++) {
             const startIndex = i * 5;
-            const question = lines[startIndex];
             const options = [lines[startIndex + 1], lines[startIndex + 2], lines[startIndex + 3], lines[startIndex + 4]];
-            
-            // Determine the correct answer string based on the answer key letter
-            const answerKey = answers[i];
-            const correctAnswerIndex = optionMap[answerKey];
-
-            if (correctAnswerIndex === undefined) {
-                 throw new Error(`Answer Key Error: Invalid answer key '${answerKey}' found in answers.txt (must be A, B, C, or D).`);
-            }
-
-            const correctAnswer = options[correctAnswerIndex];
-
-            data.push({
-                question: question,
-                options: options, 
-                answer: correctAnswer
-            });
+            const correctAnswer = options[optionMap[answers[i]]];
+            data.push({ question: lines[startIndex], options: options, answer: correctAnswer });
         }
         return data;
     }
 
-    // Function to load both text files concurrently
     async function loadQuizData() {
         loadingMessage.classList.remove('hidden');
         quizContainer.classList.add('hidden');
+        quizNavigation.classList.add('hidden');
         
         try {
             const [questionsResponse, answersResponse] = await Promise.all([
                 fetch(QUESTIONS_FILE),
                 fetch(ANSWERS_FILE)
             ]);
-
             if (!questionsResponse.ok || !answersResponse.ok) {
-                throw new Error(`One or both files not found. Check that the file paths are correct: Q: ${QUESTIONS_FILE}, A: ${ANSWERS_FILE}`);
+                throw new Error(`One or both files not found. Check that the file paths are correct.`);
             }
 
             const questionText = await questionsResponse.text();
             const answerText = await answersResponse.text();
             
-            let processedData = processTextData(questionText, answerText);
-            quizData = shuffleArray(processedData);
+            allQuizData = processTextData(questionText, answerText);
+            let shuffledData = shuffleArray(allQuizData);
+            
+            // Apply Question Limit
+            if (questionLimit > 0) {
+                const finalLimit = Math.min(questionLimit, shuffledData.length);
+                quizData = shuffledData.slice(0, finalLimit);
+            } else {
+                quizData = shuffledData;
+            }
+
             userAnswers = new Array(quizData.length).fill(null);
 
-            // SUCCESS
             loadingMessage.classList.add('hidden');
             quizContainer.classList.remove('hidden');
-            progressBarContainer.classList.remove('hidden'); // Show the progress bar
+            progressBarContainer.classList.remove('hidden');
 
-            // Start by rendering the first question
             renderQuiz(currentQuestionIndex);
-            updateProgressBar(); // Initialize progress bar
+            updateProgressBar(); 
 
         } catch (error) {
-            // ERROR HANDLING: Display the specific error message on the screen
             console.error("Could not load quiz data:", error);
             loadingMessage.style.color = 'red';
             loadingMessage.style.whiteSpace = 'pre-wrap';
-            loadingMessage.textContent = `CRITICAL QUIZ LOAD ERROR:\n${error.message}\n\nCheck the console (F12) for more details, and confirm your file formatting based on the error above.`;
+            loadingMessage.textContent = `CRITICAL QUIZ LOAD ERROR:\n${error.message}`;
         }
     }
     
-    // NEW: Function to update the progress bar width and text
     function updateProgressBar() {
         if (quizData.length === 0) return;
-        
-        // Calculate the number of questions answered (non-null entries in userAnswers)
         const answeredCount = userAnswers.filter(answer => answer !== null).length;
         const totalQuestions = quizData.length;
-        
-        // Calculate the percentage completion
         const percentage = Math.round((answeredCount / totalQuestions) * 100);
-        
         progressBar.style.width = `${percentage}%`;
         progressBar.textContent = `${answeredCount}/${totalQuestions}`;
     }
 
-    // Function to render the quiz questions (now only renders one question)
     function renderQuiz(index) {
         if (quizData.length === 0) return;
-
         const item = quizData[index];
         quizContainer.innerHTML = ''; 
         
         const card = document.createElement('div');
         card.className = 'question-card';
-        
-        const questionText = document.createElement('p');
-        questionText.textContent = `Question ${index + 1} of ${quizData.length}: ${item.question}`;
-        card.appendChild(questionText);
+        card.innerHTML = `<p>Question ${index + 1} of ${quizData.length}: ${item.question}</p>`;
 
         const optionsDiv = document.createElement('div');
         optionsDiv.className = 'options';
@@ -309,15 +303,14 @@
         
         shuffledOptions.forEach((option) => {
             const label = document.createElement('label');
+            label.classList.add(`q${index}`); 
+
             const radio = document.createElement('input');
             radio.type = 'radio';
             radio.name = `currentQuestion`; 
             radio.value = option;
-            
-            // ATTACH THE CLICK HANDLER HERE
             radio.addEventListener('change', handleAnswerClick);
 
-            // Span to hold the option text
             const optionSpan = document.createElement('span');
             optionSpan.textContent = option;
             
@@ -330,68 +323,72 @@
         quizContainer.appendChild(card);
     }
 
-    // Function to handle the option click (replaces the next/submit button logic)
     function handleAnswerClick(event) {
-        const selectedOption = event.target;
-        
-        // 1. Save the user's answer
-        userAnswers[currentQuestionIndex] = selectedOption.value;
+        const selectedRadio = event.target;
+        const selectedAnswer = selectedRadio.value;
+        const item = quizData[currentQuestionIndex];
+        const isCorrect = selectedAnswer === item.answer;
 
-        // 2. UPDATE PROGRESS BAR IMMEDIATELY
-        updateProgressBar();
-
-        // 3. Set a brief delay for visual feedback before moving on
-        setTimeout(() => {
-            // 4. Move to the next question or show results
-            if (currentQuestionIndex < quizData.length - 1) {
-                currentQuestionIndex++;
-                renderQuiz(currentQuestionIndex);
-            } else {
-                // Last question, submit the quiz
-                showResults();
-            }
-        }, 300); // 300ms (0.3 seconds) delay for feedback
-    }
-
-    // Function to check answers and display results
-    function showResults() {
-        let score = 0;
-        detailedResults.innerHTML = ''; 
-
-        quizData.forEach((item, index) => {
-            const selectedAnswer = userAnswers[index];
-            const isCorrect = selectedAnswer === item.answer;
-
-            const resultItem = document.createElement('div');
-            resultItem.className = 'result-item';
-
-            if (isCorrect) {
-                score++;
-                resultItem.classList.add('correct');
-                resultItem.innerHTML = `**Question ${index + 1}: Correct!** (${item.question})`;
-            } else {
-                resultItem.classList.add('incorrect');
-                const userAnswerText = selectedAnswer ? selectedAnswer : "No answer selected";
-                
-                resultItem.innerHTML = `
-                    **Question ${index + 1}: Incorrect.** (${item.question})
-                    <br>Your Answer: ${userAnswerText}
-                    <span class="correct-answer">Correct Answer: ${item.answer}</span>
-                `;
-            }
-            detailedResults.appendChild(resultItem);
+        document.querySelectorAll('input[name="currentQuestion"]').forEach(radio => {
+            radio.disabled = true;
         });
 
-        // Final Score Display
-        scoreText.textContent = `You got ${score} out of ${quizData.length} questions correct!`;
+        userAnswers[currentQuestionIndex] = selectedAnswer;
+        updateProgressBar();
         
-        // Toggle Visibility
-        progressBarContainer.classList.add('hidden'); // Hide the progress bar
-        resultsContainer.classList.remove('hidden');
-        quizContainer.classList.add('hidden');
+        if (isCorrect) {
+            setTimeout(() => {
+                goToNextQuestion();
+            }, 500);
+            
+        } else {
+            selectedRadio.classList.add('incorrect');
+            
+            document.querySelectorAll('.options label').forEach(label => {
+                const radio = label.querySelector('input[type="radio"]');
+                
+                if (radio.value === item.answer) {
+                    label.classList.add('highlight-correct');
+                }
+                
+                label.classList.add('disabled');
+            });
+            
+            quizNavigation.classList.remove('hidden');
+        }
+    }
+    
+    function goToNextQuestion() {
+        quizNavigation.classList.add('hidden');
+        
+        if (currentQuestionIndex < quizData.length - 1) {
+            currentQuestionIndex++;
+            renderQuiz(currentQuestionIndex);
+        } else {
+            showResults();
+        }
     }
 
-    // Start the process by loading data
+    function showResults() {
+        let score = 0;
+        quizContainer.classList.add('hidden');
+        resultsContainer.classList.remove('hidden');
+        progressBarContainer.classList.add('hidden');
+        
+        quizData.forEach((item, index) => {
+            if (userAnswers[index] === item.answer) {
+                score++;
+            }
+        });
+
+        scoreText.textContent = `You got ${score} out of ${quizData.length} questions correct!`;
+        
+        const currentParams = window.location.search;
+        document.getElementById('practiceAgainButton').onclick = function() {
+            window.location.href = window.location.pathname + currentParams;
+        };
+    }
+
     loadQuizData();
 </script>
 

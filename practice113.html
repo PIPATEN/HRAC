@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRAC 124 Question Packages</title>
     <style>
-        /* (The rest of your CSS remains unchanged) */
+        /* General Layout */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -22,7 +22,7 @@
             margin-bottom: 40px;
         }
 
-        /* Style for the buttons */
+        /* Unit Package Buttons */
         .unit-button {
             padding: 15px 30px;
             font-size: 20px;
@@ -35,7 +35,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border: none;
             cursor: pointer;
-            margin: 10px 0; /* Add margin for stacking multiple buttons */
+            margin: 10px 0; 
         }
 
         .unit-button:hover {
@@ -56,6 +56,65 @@
             flex-direction: column;
             align-items: center;
         }
+
+        /* --- MODAL STYLES (The Pop-up) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+
+        .modal-button-group button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: #007bff; /* Practice 10 */
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-button-group button:nth-child(2) {
+            background-color: #ffc107; /* Practice 20 */
+            color: #333;
+        }
+
+        .modal-button-group button:nth-child(3) {
+            background-color: #dc3545; /* Full Test */
+        }
+
+        .modal-button-group button:hover {
+            opacity: 0.9;
+        }
+        /* --- END MODAL STYLES --- */
     </style>
 </head>
 <body>
@@ -65,13 +124,93 @@
     <h1>HRAC 113 Question Packages</h1>
 
     <div class="button-group">
-        <a 
-            href="./quiz-template.html?qfile=questionbank/hrac113slide1to5.txt&afile=questionbank/hrac113slide1to5answer.txt&title=Test%201%20Practice" 
+        <button 
+            onclick="showQuizOptions('Hand Out 1 to 5', 'questionbank/hrac113slide1to5.txt', 'questionbank/hrac113slide1to5answer.txt')"
             class="unit-button">
             Hand Out 1 to 5 
-        </a>
-
+        </button>
     </div>
+
+    <div id="selectionModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modalTitle">Select Practice Type</h3>
+            <p id="modalTestName" style="color:#6c757d; font-style: italic;"></p>
+            <div class="modal-button-group">
+                <button onclick="handleSelection('10')">Practice 10 questions</button>
+                <button onclick="handleSelection('20')">Practice 20 questions</button>
+                <button onclick="handleSelection('Full')">Full Test</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Store the dynamic file paths and title temporarily
+        let currentQuizData = {
+            title: '',
+            qFile: '',
+            aFile: ''
+        };
+
+        const modal = document.getElementById('selectionModal');
+        const modalTitleElement = document.getElementById('modalTitle');
+        const modalTestNameElement = document.getElementById('modalTestName');
+        
+        /**
+         * 1. Displays the custom modal.
+         * 2. Saves the quiz specific file paths for the next step.
+         */
+        function showQuizOptions(testName, qFile, aFile) {
+            
+            // Store the relevant data for the next step
+            currentQuizData.title = testName;
+            currentQuizData.qFile = qFile;
+            currentQuizData.aFile = aFile;
+
+            // Update modal text
+            modalTitleElement.textContent = `Select Practice Size`;
+            modalTestNameElement.textContent = `for "${testName}"`;
+
+            // Show the modal
+            modal.style.display = 'flex';
+        }
+
+        /**
+         * Handles the click on one of the three buttons inside the modal,
+         * and redirects to the appropriate quiz template file.
+         * @param {string} limit - '10', '20', or 'Full'
+         */
+        function handleSelection(limit) {
+            // Hide the modal immediately
+            modal.style.display = 'none';
+
+            // Encode the title for safe URL transfer
+            const encodedTitle = encodeURIComponent(currentQuizData.title);
+            
+            let templateFile = '';
+
+            // 🔑 CORRECT LOGIC: Choose the template based on the limit
+            if (limit === 'Full') {
+                // Full Test uses the original quiz template
+                templateFile = './quiz-template.html'; 
+            } else {
+                // 10 and 20 question limits use the new practice template
+                templateFile = './practice-quiz-template.html'; 
+            }
+            // 🔑 END CORRECT LOGIC
+
+            // Construct the URL using the dynamically determined templateFile
+            let url = `${templateFile}?qfile=${currentQuizData.qFile}&afile=${currentQuizData.aFile}&title=${encodedTitle}&limit=${limit}`;
+            
+            // Redirect the user to the quiz page
+            window.location.href = url;
+        }
+
+        // Close modal if user clicks outside the content (improves UX)
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
 
 </body>
 </html>
