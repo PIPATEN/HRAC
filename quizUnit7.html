@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Shuffling Quiz Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4ff4; color: #333; }
+        .container { max-width: 700px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; color: #0056b3; }
+        .question-card { border: 1px solid #ddd; padding: 20px; margin-bottom: 15px; border-radius: 6px; }
+        .question-card p { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; }
+        .options label { display: block; margin-bottom: 10px; padding: 10px; border: 1px solid #eee; border-radius: 4px; cursor: pointer; transition: background-color 0.2s; }
+        .options label:hover { background-color: #eef; }
+        input[type="radio"] { margin-right: 10px; }
+        #submitBtn { display: block; width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-size: 1.1em; cursor: pointer; margin-top: 20px; transition: background-color 0.3s; }
+        #submitBtn:hover { background-color: #0056b3; }
+        .results { margin-top: 30px; border-top: 2px solid #0056b3; padding-top: 20px; }
+        .result-item { padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .correct { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .incorrect { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .correct-answer { font-weight: bold; color: #0056b3; margin-top: 5px; display: block; }
+        .score { font-size: 1.5em; font-weight: bold; text-align: center; margin-bottom: 20px; color: #28a745; }
+        .hidden { display: none; }
+        #loadingMessage { padding: 20px; text-align: center; font-size: 1.2em; color: #007bff; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Dynamic Shuffling Quiz Game</h1>
+    <div id="loadingMessage">Loading quiz data...</div>
+    
+    <div id="quizContainer" class="hidden">
+        </div>
+
+    <button id="submitBtn" class="hidden">Submit Quiz</button>
+
+    <div id="resultsContainer" class="results hidden">
+        <h2>Quiz Results</h2>
+        <p id="scoreText" class="score"></p>
+        <div id="detailedResults">
+            </div>
+        <button onclick="location.reload()" style="width: 100%; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px; margin-top: 20px;">Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+    const QUESTIONS_FILE = 'questions.txt';
+    const ANSWERS_FILE = 'answers.txt';
+    let quizData = []; 
+    const optionMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+
+    const quizContainer = document.getElementById('quizContainer');
+    const submitBtn = document.getElementById('submitBtn');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const scoreText = document.getElementById('scoreText');
+    const detailedResults = document.getElementById('detailedResults');
+    const loadingMessage = document.getElementById('loadingMessage');
+
+    // Utility function to shuffle array items (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Function to process the raw text files into the usable quizData structure
+    function processTextData(questionText, answerText) {
+        // FIX: Use .replace(/\r/g, '') to handle Windows (CRLF) line endings before splitting.
+        const lines = questionText.replace(/\r/g, '').split('\n').map(line => line.trim()).filter(line => line.length > 0);
+        const answers = answerText.replace(/\r/g, '').split('\n').map(line => line.trim().toUpperCase()).filter(line => line.length > 0);
+        
+        const data = [];
+        const numQuestions = Math.floor(lines.length / 5);
+
+        if (lines.length % 5 !== 0) {
+            throw new Error(`Question File Format Error: Total non-empty lines (${lines.length}) is not divisible by 5. Check for missing options or stray lines.`);
+        }
+        
+        if (numQuestions !== answers.length) {
+            throw new Error(`Data Mismatch: Found ${numQuestions} questions but ${answers.length} answers. Check file formats.`);
+        }
+
+        for (let i = 0; i < numQuestions; i++) {
+            const startIndex = i * 5;
+            const question = lines[startIndex];
+            const options = [lines[startIndex + 1], lines[startIndex + 2], lines[startIndex + 3], lines[startIndex + 4]];
+            
+            // Determine the correct answer string based on the answer key letter
+            const answerKey = answers[i];
+            const correctAnswerIndex = optionMap[answerKey];
+
+            if (correctAnswerIndex === undefined) {
+                 throw new Error(`Answer Key Error: Invalid answer key '${answerKey}' found in answers.txt (must be A, B, C, or D).`);
+            }
+
+            const correctAnswer = options[correctAnswerIndex];
+
+            data.push({
+                question: question,
+                options: options, 
+                answer: correctAnswer
+            });
+        }
+        return data;
+    }
+
+    // Function to load both text files concurrently
+    async function loadQuizData() {
+        loadingMessage.classList.remove('hidden');
+        quizContainer.classList.add('hidden');
+        submitBtn.classList.add('hidden');
+        
+        try {
+            // Fetch both files concurrently
+            const [questionsResponse, answersResponse] = await Promise.all([
+                fetch(QUESTIONS_FILE),
+                fetch(ANSWERS_FILE)
+            ]);
+
+            if (!questionsResponse.ok || !answersResponse.ok) {
+                // Throws an explicit error if the server returns a non-success status (e.g., 404)
+                throw new Error("Files Not Found. Ensure questions.txt and answers.txt are in the server root directory and file names match.");
+            }
+
+            const questionText = await questionsResponse.text();
+            const answerText = await answersResponse.text();
+            
+            // 1. Process the raw text into the initial data structure
+            let processedData = processTextData(questionText, answerText);
+            
+            // 2. SHUFFLE THE QUESTIONS
+            quizData = shuffleArray(processedData);
+            
+            // SUCCESS
+            loadingMessage.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            submitBtn.classList.remove('hidden');
+
+            renderQuiz();
+
+        } catch (error) {
+            // ERROR HANDLING: Display the specific error message on the screen
+            console.error("Could not load quiz data:", error);
+            loadingMessage.style.color = 'red';
+            loadingMessage.style.whiteSpace = 'pre-wrap';
+            loadingMessage.textContent = `CRITICAL QUIZ LOAD ERROR:\n${error.message}\n\nCheck the console (F12) for more details, and confirm your file formatting based on the error above.`;
+        }
+    }
+
+    // Function to render the quiz questions
+    function renderQuiz() {
+        // Clear old content
+        quizContainer.innerHTML = ''; 
+        
+        quizData.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            const questionText = document.createElement('p');
+            questionText.textContent = `Question ${index + 1}: ${item.question}`;
+            card.appendChild(questionText);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+            
+            // Shuffle and display options 
+            const shuffledOptions = shuffleArray([...item.options]);
+            
+            shuffledOptions.forEach((option) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = option;
+                
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(option));
+                optionsDiv.appendChild(label);
+            });
+
+            card.appendChild(optionsDiv);
+            quizContainer.appendChild(card);
+        });
+    }
+
+    // Function to check answers and display results
+    function showResults() {
+        let score = 0;
+        detailedResults.innerHTML = ''; 
+
+        quizData.forEach((item, index) => {
+            const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+            const isCorrect = selectedOption && selectedOption.value === item.answer;
+
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+
+            if (isCorrect) {
+                score++;
+                resultItem.classList.add('correct');
+                resultItem.innerHTML = `**Question ${index + 1}: Correct!** (${item.question})`;
+            } else {
+                resultItem.classList.add('incorrect');
+                const userAnswer = selectedOption ? selectedOption.value : "No answer selected";
+                
+                resultItem.innerHTML = `
+                    **Question ${index + 1}: Incorrect.** (${item.question})
+                    <br>Your Answer: ${userAnswer}
+                    <span class="correct-answer">Correct Answer: ${item.answer}</span>
+                `;
+            }
+            detailedResults.appendChild(resultItem);
+        });
+
+        // Final Score Display
+        scoreText.textContent = `You got ${score} out of ${quizData.length} questions correct!`;
+        
+        // Toggle Visibility
+        submitBtn.classList.add('hidden');
+        resultsContainer.classList.remove('hidden');
+        quizContainer.classList.add('hidden');
+    }
+
+    // Event Listener for Submission
+    submitBtn.addEventListener('click', showResults);
+
+    // Start the process by loading data
+    loadQuizData();
+</script>
+
+</body>
+</html>

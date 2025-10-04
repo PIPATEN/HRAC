@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRAC question practicing page</title>
+    <title>HRAC 124 Question Packages</title>
     <style>
-        /* Basic styling for centering and making the button clear */
+        /* Basic styling for centering and consistency with the main page */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -22,14 +22,14 @@
             margin-bottom: 40px;
         }
 
-        .hvac-button {
-            /* Style to make it look like a prominent button */
+        /* Style for the new Unit 7 button */
+        .unit-button {
             padding: 15px 30px;
             font-size: 20px;
             font-weight: bold;
-            text-decoration: none; /* Removes the underline from the link */
+            text-decoration: none;
             color: white;
-            background-color: #007bff; /* Primary blue color */
+            background-color: #28a745; /* Green color for new link */
             border-radius: 8px;
             transition: background-color 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -37,16 +37,28 @@
             cursor: pointer;
         }
 
-        .hvac-button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
+        .unit-button:hover {
+            background-color: #1e7e34; /* Darker green on hover */
+        }
+
+        /* Style for a 'Back' button, good for navigation */
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
+    
+    <a href="./index.html" class="back-link">&larr; Back to Home</a>
 
-    <h1>HRAC question practicing page</h1>
+    <h1>HRAC 124 Question Packages</h1>
 
-    <a href="./practice124.html" class="hvac-button">HRAC 124</a>
+    <a href="./quizUnit7test.html" class="unit-button">Unit 7 Questions</a>
 
 </body>
 </html>
