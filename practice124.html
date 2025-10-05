@@ -4,171 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRAC 124 Question Packages</title>
-    <style>
-        /* (Your existing CSS) */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f9;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 40px;
-        }
-
-        /* Style for the package buttons */
-        .unit-button {
-            padding: 15px 30px;
-            font-size: 20px;
-            font-weight: bold;
-            text-decoration: none;
-            color: white;
-            background-color: #28a745; 
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: none;
-            cursor: pointer;
-            margin: 10px 0; 
-        }
-
-        .unit-button:hover {
-            background-color: #1e7e34; 
-        }
-
-        .back-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            text-decoration: none;
-            color: #007bff;
-            font-size: 16px;
-        }
-
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* 🔑 NEW STYLES for Score Bubble */
-        .button-wrapper {
-            position: relative; 
-            margin: 10px 0;
-            width: 360px; /* Set a fixed max width for cleaner alignment */
-            max-width: 90vw;
-        }
-
-        .button-wrapper .unit-button {
-            width: 100%;
-        }
-
-        .score-bubble {
-            position: absolute;
-            top: -10px; /* Position above the button */
-            right: 15px; /* Aligned with button padding */
-            background-color: #007bff; /* Primary color */
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            z-index: 10; 
-            white-space: nowrap; /* Prevent wrapping */
-        }
-        /* --- MODAL STYLES --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: none; /* Hidden by default */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .modal-content h3 {
-            margin-top: 0;
-            color: #0056b3;
-            margin-bottom: 20px;
-        }
-
-        .modal-button-group button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .modal-button-group button:nth-child(2) {
-            background-color: #ffc107; 
-            color: #333;
-        }
-
-        .modal-button-group button:nth-child(3) {
-            background-color: #dc3545; 
-        }
-
-        .modal-button-group button:hover {
-            opacity: 0.9;
-        }
-        /* --- END MODAL STYLES --- */
-    </style>
+    <link rel="stylesheet" href="styles.css"> 
 </head>
-<body>
+<body> 
     
     <a href="./index.html" class="back-link">&larr; Back to Home</a>
 
     <h1>HRAC 124 Question Packages</h1>
 
-    <div class="button-group">
+    <div class="button-group page-111-group">
         
         <div class="button-wrapper">
             <button
-                data-test-name="Test 1 Question Practice"
+                id="btn-Test1QuestionPractice"
                 onclick="showQuizOptions('Test 1 Question Practice', 'questionbank/hrac124test1.txt', 'questionbank/hrac124test1answer.txt')"
                 class="unit-button">
                 Test 1 Question Practice
             </button>
-            <span id="score-Test1QuestionPractice" class="score-bubble hidden"></span>
+            <span id="score-Test1QuestionPractice" class="score-bubble"></span>
         </div>
 
         <div class="button-wrapper">
             <button
-                data-test-name="Unit 7 Question Drill 1"
+                id="btn-Unit7QuestionDrill1"
                 onclick="showQuizOptions('Unit 7 Question Drill 1', 'questionbank/hrac124unit7set1.txt', 'questionbank/hrac124unit7set1answer.txt')"
                 class="unit-button">
                 Unit 7 Question Drill 1
             </button>
-            <span id="score-Unit7QuestionDrill1" class="score-bubble hidden"></span>
+            <span id="score-Unit7QuestionDrill1" class="score-bubble"></span>
         </div>
 
     </div>
@@ -184,127 +47,15 @@
             </div>
         </div>
     </div>
+    
     <script>
-        // Store the dynamic file paths and title temporarily
-        let currentQuizData = {
-            title: '',
-            qFile: '',
-            aFile: ''
-        };
-
-        const modal = document.getElementById('selectionModal');
-        const modalTitleElement = document.getElementById('modalTitle');
-        const modalTestNameElement = document.getElementById('modalTestName');
-        
-        /**
-         * 1. Displays the custom modal.
-         * 2. Saves the quiz specific file paths for the next step.
-         */
-        function showQuizOptions(testName, qFile, aFile) {
-            
-            // Store the relevant data for the next step
-            currentQuizData.title = testName;
-            currentQuizData.qFile = qFile;
-            currentQuizData.aFile = aFile;
-
-            // Update modal text
-            modalTitleElement.textContent = `Select Practice Size`;
-            modalTestNameElement.textContent = `for "${testName}"`;
-
-            // Show the modal
-            modal.style.display = 'flex';
-        }
-
-        /**
-         * Handles the click on one of the three buttons inside the modal,
-         * and redirects to the appropriate quiz template file based on limit.
-         * @param {string} limit - '10', '20', or 'Full'
-         */
-        function handleSelection(limit) {
-            // Hide the modal immediately
-            modal.style.display = 'none';
-
-            // Encode the title for safe URL transfer
-            const encodedTitle = encodeURIComponent(currentQuizData.title);
-            
-            let templateFile = '';
-
-            // CORE LOGIC: Use practice-quiz-template for limited sets, quiz-template for Full.
-            if (limit === 'Full') {
-                templateFile = './quiz-template.html'; 
-            } else {
-                templateFile = './practice-quiz-template.html'; 
-            }
-
-            // Construct the URL using the dynamically determined templateFile
-            let url = `${templateFile}?qfile=${currentQuizData.qFile}&afile=${currentQuizData.aFile}&title=${encodedTitle}&limit=${limit}`;
-            
-            // Redirect the user to the quiz page
-            window.location.href = url;
-        }
-
-        // 🔑 NEW FUNCTION: Load best scores from localStorage and display them
-        function loadBestScores() {
-            // Find all buttons that have a data-test-name
-            document.querySelectorAll('.unit-button').forEach(button => {
-                const testName = button.getAttribute('data-test-name');
-                if (!testName) return;
-
-                // The storage key is 'bestScore_' + Title (with spaces removed)
-                const storageKey = 'bestScore_' + testName.replace(/\s/g, ''); 
-                const scoreBubbleId = `score-${testName.replace(/\s/g, '')}`;
-                const scoreBubble = document.getElementById(scoreBubbleId);
-                
-                if (!scoreBubble) return;
-
-                const storedScoreString = localStorage.getItem(storageKey);
-                
-                if (storedScoreString) {
-                    try {
-                        // The stored data is an object: { score: X, date: Y }
-                        const bestScoreData = JSON.parse(storedScoreString);
-                        let score = 0;
-
-                        if (typeof bestScoreData === 'object' && bestScoreData !== null && 'score' in bestScoreData) {
-                            score = bestScoreData.score;
-                            // Only show the score number as requested
-                            scoreBubble.textContent = `Best: ${score}`;
-
-                        } else if (!isNaN(parseInt(storedScoreString))) {
-                            // Fallback for very old local storage format where only the score number was saved
-                            score = parseInt(storedScoreString);
-                            scoreBubble.textContent = `Best: ${score}`;
-                        }
-                        
-                        // Only show the bubble if a score greater than 0 was found
-                        if (score > 0) {
-                            scoreBubble.classList.remove('hidden');
-                        } else {
-                            scoreBubble.classList.add('hidden');
-                        }
-
-                    } catch (e) {
-                        // Error parsing JSON (e.g., from an old storage format that wasn't just a number)
-                        console.warn('Error parsing best score for:', testName, e);
-                        scoreBubble.classList.add('hidden');
-                    }
-                } else {
-                    scoreBubble.classList.add('hidden');
-                }
-            });
-        }
-
-
-        // Optional: Close modal if user clicks outside the content (improves UX)
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-        // 🔑 Call the new function when the page loads
-        loadBestScores();
+        const pageQuizzes = [
+            { title: 'Test 1 Question Practice', spanId: 'score-Test1QuestionPractice', defaultTotal: 40 },
+            { title: 'Unit 7 Question Drill 1', spanId: 'score-Unit7QuestionDrill1', defaultTotal: 40 }
+        ];
     </script>
+    
+    <script src="practice-logic.js"></script>
 
 </body>
 </html>

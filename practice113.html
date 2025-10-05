@@ -4,166 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRAC 113 Question Packages</title>
-    <style>
-        /* General Layout */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f9;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 40px;
-        }
-
-        /* 🔑 Updated: Button Group & Wrapper for relative positioning */
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-        }
-
-        .button-wrapper {
-            position: relative; 
-            margin: 10px 0;
-            width: 360px; /* Standard width for cleaner alignment */
-            max-width: 90vw;
-        }
-        
-        .button-wrapper .unit-button {
-            width: 100%;
-        }
-        /* End Updated Button Group */
-
-        /* Unit Package Buttons */
-        .unit-button {
-            padding: 15px 30px;
-            font-size: 20px;
-            font-weight: bold;
-            text-decoration: none;
-            color: white;
-            background-color: #28a745; 
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: none;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .unit-button:hover {
-            background-color: #1e7e34; 
-        }
-
-        /* 🔑 Updated: Small Blue Score Bubble Styling (like practice124.html) */
-        .score-bubble {
-            position: absolute;
-            top: -10px; /* Position above the button */
-            right: 15px; /* Aligned with button padding */
-            background-color: #007bff; /* Primary Blue color */
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            z-index: 10; 
-            white-space: nowrap; 
-            min-width: unset; 
-            text-align: left; 
-        }
-        
-        /* Perfect Score Style (40/40) */
-        .score-perfect { 
-            background-color: gold !important; 
-            color: #333 !important; 
-            box-shadow: 0 0 15px rgba(255, 215, 0, 1); 
-            border: 2px solid white;
-            padding: 7px 12px;
-            font-size: 14px;
-        }
-        
-        .back-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            text-decoration: none;
-            color: #007bff;
-            font-size: 16px;
-        }
-
-        /* --- MODAL STYLES (The Pop-up) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: none; 
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .modal-content h3 {
-            margin-top: 0;
-            color: #0056b3;
-            margin-bottom: 20px;
-        }
-
-        .modal-button-group button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background-color: #007bff; 
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .modal-button-group button:nth-child(2) {
-            background-color: #ffc107; 
-            color: #333;
-        }
-
-        .modal-button-group button:nth-child(3) {
-            background-color: #dc3545; 
-        }
-
-        .modal-button-group button:hover {
-            opacity: 0.9;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"> 
 </head>
-<body onload="loadBestScores()">
+<body>
     
     <a href="./index.html" class="back-link">&larr; Back to Home</a>
 
     <h1>HRAC 113 Question Packages</h1>
 
-    <div class="button-group">
+    <div class="button-group page-111-group">
         <div class="button-wrapper"> 
             <button 
                 id="btn-HandOut1to5"
@@ -186,106 +35,15 @@
             </div>
         </div>
     </div>
+
     <script>
-        let currentQuizData = {
-            title: '',
-            qFile: '',
-            aFile: ''
-        };
-
-        const modal = document.getElementById('selectionModal');
-        const modalTitleElement = document.getElementById('modalTitle');
-        const modalTestNameElement = document.getElementById('modalTestName');
-        
-        function showQuizOptions(testName, qFile, aFile) {
-            currentQuizData.title = testName;
-            currentQuizData.qFile = qFile;
-            currentQuizData.aFile = aFile;
-
-            modalTitleElement.textContent = `Select Practice Size`;
-            modalTestNameElement.textContent = `for "${testName}"`;
-
-            modal.style.display = 'flex';
-        }
-
-        function handleSelection(limit) {
-            modal.style.display = 'none';
-
-            const encodedTitle = encodeURIComponent(currentQuizData.title);
-            
-            let templateFile = '';
-
-            if (limit === 'Full') {
-                templateFile = './quiz-template.html'; 
-            } else {
-                templateFile = './practice-quiz-template.html'; 
-            }
-
-            const currentPage = window.location.pathname.split('/').pop() || 'practice113.html';
-
-            let url = `${templateFile}?qfile=${currentQuizData.qFile}&afile=${currentQuizData.aFile}&title=${encodedTitle}&limit=${limit}&bpage=${currentPage}`;
-            
-            window.location.href = url;
-        }
-
-        // --- SCORE LOADING LOGIC (Simplified for Blue Bubble) ---
-        
-        function loadBestScores() {
-            // Configuration for the quiz package in this file
-            const quizzes = [
-                { title: 'Hand Out 1 to 5', spanId: 'score-HandOut1to5', defaultTotal: 40 },
-            ];
-
-            quizzes.forEach(quiz => {
-                const storageKey = 'bestScore_' + quiz.title.replace(/\s/g, ''); 
-                const storedScoreString = localStorage.getItem(storageKey);
-                const indicatorSpan = document.getElementById(quiz.spanId);
-
-                if (indicatorSpan) {
-                    let score = 0;
-                    let total = quiz.defaultTotal;
-
-                    if (storedScoreString) {
-                        try {
-                            // Score is stored as JSON: { score: X, total: Y }
-                            const bestScore = JSON.parse(storedScoreString);
-                            score = bestScore.score || 0;
-                            total = bestScore.total || quiz.defaultTotal; 
-                        } catch (e) {
-                            // Fallback for old storage format
-                            score = parseInt(storedScoreString) || 0; 
-                        }
-                    }
-                    
-                    if (score > 0) {
-                        // Display the score in the small blue bubble
-                        indicatorSpan.textContent = `Best: ${score}/${total}`;
-                        indicatorSpan.className = 'score-bubble'; // Blue by default from CSS
-
-                        // Override to Gold/Perfect if 40/40
-                        if (score === total && total === 40) {
-                            indicatorSpan.textContent = `⭐ Best: ${score}/${total} ⭐`;
-                            indicatorSpan.classList.add('score-perfect');
-                        }
-                        
-                        indicatorSpan.style.display = 'block';
-
-                    } else {
-                        // Hide the bubble if score is 0 or not found
-                        indicatorSpan.style.display = 'none';
-                    }
-                }
-            });
-        }
-        // --- END SCORE LOADING LOGIC ---
-
-        // Close modal if user clicks outside the content (improves UX)
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
+        const pageQuizzes = [
+            // The score logic in practice-logic.js will look for this name and ID
+            { title: 'Hand Out 1 to 5', spanId: 'score-HandOut1to5', defaultTotal: 40 },
+        ];
     </script>
+    
+    <script src="practice-logic.js"></script>
 
 </body>
 </html>
