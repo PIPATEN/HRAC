@@ -57,6 +57,32 @@
             align-items: center;
         }
 
+        /* 🔑 NEW STYLES for Score Bubble */
+        .button-wrapper {
+            position: relative; 
+            margin: 10px 0;
+            width: 360px; /* Set a fixed max width for cleaner alignment */
+            max-width: 90vw;
+        }
+
+        .button-wrapper .unit-button {
+            width: 100%;
+        }
+
+        .score-bubble {
+            position: absolute;
+            top: -10px; /* Position above the button */
+            right: 15px; /* Aligned with button padding */
+            background-color: #007bff; /* Primary color */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 10; 
+            white-space: nowrap; /* Prevent wrapping */
+        }
         /* --- MODAL STYLES --- */
         .modal-overlay {
             position: fixed;
@@ -124,17 +150,27 @@
     <h1>HRAC 124 Question Packages</h1>
 
     <div class="button-group">
-        <button
-            onclick="showQuizOptions('Test 1 Question Practice', 'questionbank/hrac124test1.txt', 'questionbank/hrac124test1answer.txt')"
-            class="unit-button">
-            Test 1 Question Practice
-        </button>
+        
+        <div class="button-wrapper">
+            <button
+                data-test-name="Test 1 Question Practice"
+                onclick="showQuizOptions('Test 1 Question Practice', 'questionbank/hrac124test1.txt', 'questionbank/hrac124test1answer.txt')"
+                class="unit-button">
+                Test 1 Question Practice
+            </button>
+            <span id="score-Test1QuestionPractice" class="score-bubble hidden"></span>
+        </div>
 
-        <button
-            onclick="showQuizOptions('Unit 7 Question Drill 1', 'questionbank/hrac124unit7set1.txt', 'questionbank/hrac124unit7set1answer.txt')"
-            class="unit-button">
-            Unit 7 Question Drill 1
-        </button>
+        <div class="button-wrapper">
+            <button
+                data-test-name="Unit 7 Question Drill 1"
+                onclick="showQuizOptions('Unit 7 Question Drill 1', 'questionbank/hrac124unit7set1.txt', 'questionbank/hrac124unit7set1answer.txt')"
+                class="unit-button">
+                Unit 7 Question Drill 1
+            </button>
+            <span id="score-Unit7QuestionDrill1" class="score-bubble hidden"></span>
+        </div>
+
     </div>
 
     <div id="selectionModal" class="modal-overlay">
@@ -207,12 +243,67 @@
             window.location.href = url;
         }
 
+        // 🔑 NEW FUNCTION: Load best scores from localStorage and display them
+        function loadBestScores() {
+            // Find all buttons that have a data-test-name
+            document.querySelectorAll('.unit-button').forEach(button => {
+                const testName = button.getAttribute('data-test-name');
+                if (!testName) return;
+
+                // The storage key is 'bestScore_' + Title (with spaces removed)
+                const storageKey = 'bestScore_' + testName.replace(/\s/g, ''); 
+                const scoreBubbleId = `score-${testName.replace(/\s/g, '')}`;
+                const scoreBubble = document.getElementById(scoreBubbleId);
+                
+                if (!scoreBubble) return;
+
+                const storedScoreString = localStorage.getItem(storageKey);
+                
+                if (storedScoreString) {
+                    try {
+                        // The stored data is an object: { score: X, date: Y }
+                        const bestScoreData = JSON.parse(storedScoreString);
+                        let score = 0;
+
+                        if (typeof bestScoreData === 'object' && bestScoreData !== null && 'score' in bestScoreData) {
+                            score = bestScoreData.score;
+                            // Only show the score number as requested
+                            scoreBubble.textContent = `Best: ${score}`;
+
+                        } else if (!isNaN(parseInt(storedScoreString))) {
+                            // Fallback for very old local storage format where only the score number was saved
+                            score = parseInt(storedScoreString);
+                            scoreBubble.textContent = `Best: ${score}`;
+                        }
+                        
+                        // Only show the bubble if a score greater than 0 was found
+                        if (score > 0) {
+                            scoreBubble.classList.remove('hidden');
+                        } else {
+                            scoreBubble.classList.add('hidden');
+                        }
+
+                    } catch (e) {
+                        // Error parsing JSON (e.g., from an old storage format that wasn't just a number)
+                        console.warn('Error parsing best score for:', testName, e);
+                        scoreBubble.classList.add('hidden');
+                    }
+                } else {
+                    scoreBubble.classList.add('hidden');
+                }
+            });
+        }
+
+
         // Optional: Close modal if user clicks outside the content (improves UX)
         modal.addEventListener('click', (event) => {
             if (event.target === modal) {
                 modal.style.display = 'none';
             }
         });
+
+        // 🔑 Call the new function when the page loads
+        loadBestScores();
     </script>
 
 </body>

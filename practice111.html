@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRAC 113 Question Packages</title>
+    <title>HRAC 111 Question Packages</title>
     <style>
         /* General Layout */
         body {
@@ -21,14 +21,15 @@
             color: #333;
             margin-bottom: 40px;
         }
-
-        /* 🔑 Updated: Button Group & Wrapper for relative positioning */
+        
+        /* Button Group & Wrapper */
         .button-group {
             display: flex;
             flex-direction: column;
-            align-items: center; 
+            align-items: center; /* Center the buttons */
         }
-
+        
+        /* 🔑 Updated: Button Wrapper for relative positioning (small bubble style) */
         .button-wrapper {
             position: relative; 
             margin: 10px 0;
@@ -39,7 +40,6 @@
         .button-wrapper .unit-button {
             width: 100%;
         }
-        /* End Updated Button Group */
 
         /* Unit Package Buttons */
         .unit-button {
@@ -75,8 +75,8 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             z-index: 10; 
             white-space: nowrap; 
-            min-width: unset; 
-            text-align: left; 
+            min-width: unset; /* Remove large width constraint */
+            text-align: left; /* Let content dictate width */
         }
         
         /* Perfect Score Style (40/40) */
@@ -89,6 +89,11 @@
             font-size: 14px;
         }
         
+        /* Hide element (used by JS if no score is saved) */
+        .hidden {
+            display: none;
+        }
+
         .back-link {
             position: absolute;
             top: 20px;
@@ -161,17 +166,17 @@
     
     <a href="./index.html" class="back-link">&larr; Back to Home</a>
 
-    <h1>HRAC 113 Question Packages</h1>
+    <h1>HRAC 111 Question Packages</h1>
 
     <div class="button-group">
         <div class="button-wrapper"> 
             <button 
-                id="btn-HandOut1to5"
-                onclick="showQuizOptions('Hand Out 1 to 5', 'questionbank/hrac113slide1to5.txt', 'questionbank/hrac113slide1to5answer.txt')"
+                id="btn-Quiz1"
+                onclick="showQuizOptions('Quiz 1', 'questionbank/hrac111quiz1.txt', 'questionbank/hrac111quiz1answer.txt')"
                 class="unit-button">
-                Hand Out 1 to 5 
+                Quiz 1
             </button>
-            <span id="score-HandOut1to5" class="score-bubble"></span>
+            <span id="score-Quiz1" class="score-bubble"></span>
         </div>
     </div>
 
@@ -204,7 +209,6 @@
 
             modalTitleElement.textContent = `Select Practice Size`;
             modalTestNameElement.textContent = `for "${testName}"`;
-
             modal.style.display = 'flex';
         }
 
@@ -221,7 +225,7 @@
                 templateFile = './practice-quiz-template.html'; 
             }
 
-            const currentPage = window.location.pathname.split('/').pop() || 'practice113.html';
+            const currentPage = window.location.pathname.split('/').pop() || 'practice111.html';
 
             let url = `${templateFile}?qfile=${currentQuizData.qFile}&afile=${currentQuizData.aFile}&title=${encodedTitle}&limit=${limit}&bpage=${currentPage}`;
             
@@ -231,9 +235,9 @@
         // --- SCORE LOADING LOGIC (Simplified for Blue Bubble) ---
         
         function loadBestScores() {
-            // Configuration for the quiz package in this file
+            // Only the 'Quiz 1' item is included
             const quizzes = [
-                { title: 'Hand Out 1 to 5', spanId: 'score-HandOut1to5', defaultTotal: 40 },
+                { title: 'Quiz 1', spanId: 'score-Quiz1', defaultTotal: 40 },
             ];
 
             quizzes.forEach(quiz => {
@@ -247,18 +251,18 @@
 
                     if (storedScoreString) {
                         try {
-                            // Score is stored as JSON: { score: X, total: Y }
                             const bestScore = JSON.parse(storedScoreString);
                             score = bestScore.score || 0;
+                            // Safely retrieve total, defaulting to 40 if missing/invalid
                             total = bestScore.total || quiz.defaultTotal; 
                         } catch (e) {
-                            // Fallback for old storage format
+                            // Fallback for very old storage format (raw number)
                             score = parseInt(storedScoreString) || 0; 
                         }
                     }
                     
                     if (score > 0) {
-                        // Display the score in the small blue bubble
+                        // All scores greater than 0 are shown in the small blue bubble
                         indicatorSpan.textContent = `Best: ${score}/${total}`;
                         indicatorSpan.className = 'score-bubble'; // Blue by default from CSS
 
