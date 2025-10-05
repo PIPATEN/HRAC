@@ -161,7 +161,7 @@ h1 {
     background-color: #1e7e34;
 }
 
-/* --- 🔑 NEW: High Score / Gold Button Styles (90% or greater) --- */
+/* --- High Score / Gold Button Styles (90% or greater) --- */
 .unit-button.score-achieved {
     /* Main Gold Style */
     background-color: #ffc107; /* Bright Yellow/Gold */
@@ -282,34 +282,30 @@ h1 {
     margin-bottom: 20px;
 }
 
-.modal-button-group button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    background-color: var(--primary-color);
+/* Original modal buttons are not used by the new comment modal */
+
+/* --- Floating Comment Button Style --- */
+.floating-button {
+    position: fixed; /* 🔑 Key: Stays fixed on screen */
+    bottom: 20px; 
+    right: 20px; 
+    z-index: 999; /* 🔑 Key: Ensures it's always on top */
+    padding: 12px 20px;
+    background-color: var(--primary-color); 
+    color: var(--text-light);
     border: none;
-    border-radius: 6px;
+    border-radius: 50px; /* Pill shape for rounded corners */
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.modal-button-group button:nth-child(2) {
-    background-color: var(--announcement-bg);
-    color: var(--text-dark);
+.floating-button:hover {
+    background-color: #0056b3; 
+    transform: translateY(-2px);
 }
-
-.modal-button-group button:nth-child(3) {
-    background-color: #dc3545;
-}
-
-.modal-button-group button:hover {
-    opacity: 0.9;
-}
-
 
 /* --- Mobile Responsiveness (Shared) --- */
 @media (max-width: 768px) {
@@ -327,13 +323,4 @@ h1 {
         font-size: 16px;
         padding: 12px 25px;
     }
-    .button-group:not(.page-111-group), .page-111-group {
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-    }
-    .button-wrapper {
-        width: 100%;
-        max-width: 300px;
-    }
-}
+    .button-group:not(.page-111-group), .page-

@@ -33,6 +33,23 @@
         </div>
     </div>
 
+    <button id="commentButton" class="floating-button" onclick="openCommentModal()">
+        Comment
+    </button>
+    
+    <div id="commentModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Send Feedback</h3>
+            <p>Your comments help improve the page. Please enter your email and feedback below. Clicking "Send Comment" will open your email client.</p>
+            <form id="commentForm">
+                <input type="email" id="userEmail" placeholder="Your Email (optional)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                <textarea id="userComment" placeholder="Your feedback here..." rows="5" required style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+                <button type="submit" class="hvac-button" style="background-color: var(--secondary-color); width: 100%; margin: 0;">Send Comment</button>
+            </form>
+            <button onclick="closeCommentModal()" class="hvac-button" style="background-color: var(--disabled-color); width: 100%; margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
 <script>
     /**
      * Loads the announcement text from the separate 'announcement.txt' file 
@@ -66,6 +83,44 @@
 
     // Call the function when the page loads
     loadAnnouncement();
+
+    // 🔑 NEW: Comment Modal Functions
+    const commentModal = document.getElementById('commentModal');
+    const commentForm = document.getElementById('commentForm');
+    const userEmailInput = document.getElementById('userEmail');
+    const userCommentInput = document.getElementById('userComment');
+    const recipientEmail = 'thaibinh11287@gmail.com';
+
+    function openCommentModal() {
+        commentModal.style.display = 'flex';
+        // Reset form fields when opening
+        commentForm.reset(); 
+    }
+
+    function closeCommentModal() {
+        commentModal.style.display = 'none';
+    }
+
+    // Handle form submission to create the mailto: link
+    commentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = userEmailInput.value.trim();
+        const comment = userCommentInput.value.trim();
+        
+        // Encode for URL safety
+        const subject = encodeURIComponent(`Website Feedback from ${email || 'Anonymous User'}`);
+        const body = encodeURIComponent(`User Email: ${email || 'N/A'}\n\nComment:\n${comment}`);
+        
+        // Construct the mailto link
+        const mailtoLink = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
+        
+        // Open the user's default email client
+        window.location.href = mailtoLink;
+        
+        // Optionally close the modal after generating the link
+        closeCommentModal();
+    });
 </script>
 
 </body>
