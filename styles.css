@@ -76,8 +76,12 @@ h1 {
     margin-bottom: 25px;
     padding: 10px 20px;
     border-bottom: 3px solid var(--primary-color); 
-    width: 100%;
+    /* FIX: Make the header only as wide as its content and center it */
+    width: fit-content; 
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
+    /* END FIX */
     font-weight: 600;
     letter-spacing: 1px;
 }
@@ -376,12 +380,15 @@ h1 {
     .section-header {
         font-size: 1.4em;
     }
-    .hvac-button, .unit-button {
+    .hvac-button, .unit-button, .modal-button-group button {
         width: 100%; 
         max-width: 300px;
         margin: 8px auto;
         font-size: 16px;
         padding: 12px 25px;
     }
-    .button-group:not(.page-111-group), .page-
+    .button-group:not(.page-111-group), .page-111-group {
+        flex-direction: column;
+        align-items: center;
+    }
 }
