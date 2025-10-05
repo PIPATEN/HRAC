@@ -15,6 +15,10 @@
     --scroll-speed: 25s;
     --button-width: 360px; 
     --perfect-score-bg: gold; 
+    /* NEW COLORS for Modal Buttons */
+    --quiz-10-color: var(--primary-color); /* Blue */
+    --quiz-20-color: var(--secondary-color); /* Green */
+    --quiz-full-color: #dc3545; /* Red */
 }
 
 /* --- Global & Body Styling --- */
@@ -282,8 +286,6 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* Original modal buttons are not used by the new comment modal */
-
 /* --- Floating Comment Button Style --- */
 .floating-button {
     position: fixed; /* 🔑 Key: Stays fixed on screen */
@@ -307,6 +309,64 @@ h1 {
     transform: translateY(-2px);
 }
 
+/* FIX: Style for the button container inside the selection modal */
+.modal-button-group {
+    /* Use Flexbox to stack the buttons vertically */
+    display: flex;
+    flex-direction: column;
+    /* Center the buttons horizontally */
+    align-items: center;
+    /* Add some space between the buttons */
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Base style for the modal buttons to look like HVCA buttons */
+.modal-button-group button {
+    width: 100%; 
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-light);
+    border-radius: 12px; 
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+    border: none;
+    cursor: pointer;
+    margin: 0; /* Margin handled by gap in container */
+    text-align: center;
+    max-width: 300px; /* Use a max-width for consistency */
+}
+
+/* Specific Color Styles for each button */
+.quiz-10 {
+    background-color: var(--quiz-10-color); /* Blue */
+}
+.quiz-10:hover {
+    background-color: #0056b3; 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.quiz-20 {
+    background-color: var(--quiz-20-color); /* Green */
+}
+.quiz-20:hover {
+    background-color: #1e7e34; 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.quiz-full {
+    background-color: var(--quiz-full-color); /* Red */
+}
+.quiz-full:hover {
+    background-color: #c82333; 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
 /* --- Mobile Responsiveness (Shared) --- */
 @media (max-width: 768px) {
     h1 {
@@ -324,3 +384,4 @@ h1 {
         padding: 12px 25px;
     }
     .button-group:not(.page-111-group), .page-
+}
