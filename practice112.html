@@ -3,65 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRAC 111 Question Packages</title>
+    <title>HRAC 112 Question Packages</title>
     <link rel="stylesheet" href="styles.css"> 
 </head>
 <body> 
     
     <a href="./index.html" class="back-link">&larr; Back to Home</a>
 
-    <h1>HRAC 111 Question Packages</h1>
+    <h1>HRAC 112 Question Packages</h1>
 
     <div class="button-group page-111-group">
         
         <div class="button-wrapper"> 
             <button 
-                id="btn-Quiz1"
-                onclick="showQuizOptions('Quiz 1', 'questionbank/hrac111quiz1.txt', 'questionbank/hrac111quiz1answer.txt')"
-                class="unit-button">
-                Quiz 1
-            </button>
-            <span id="score-Quiz1" class="score-bubble"></span>
-        </div>
-
-        <div class="button-wrapper"> 
-            <button 
                 id="btn-Week1"
-                onclick="showQuizOptions('Week 1', 'questionbank/hrac111week1.txt', 'questionbank/hrac111week1answer.txt')"
+                onclick="showQuizOptions('Week 1', 'questionbank/hrac112week1.txt', 'questionbank/hrac112week1answer.txt')"
                 class="unit-button">
                 Week 1
             </button>
             <span id="score-Week1" class="score-bubble"></span>
         </div>
-        
+
         <div class="button-wrapper"> 
             <button 
                 id="btn-Week2"
-                onclick="showQuizOptions('Week 2', 'questionbank/hrac111week2.txt', 'questionbank/hrac111week2answer.txt')"
+                onclick="showQuizOptions('Week 2', 'questionbank/hrac112week2.txt', 'questionbank/hrac112week2answer.txt')"
                 class="unit-button">
                 Week 2
             </button>
             <span id="score-Week2" class="score-bubble"></span>
         </div>
-
+        
         <div class="button-wrapper"> 
             <button 
-                id="btn-Week34"
-                onclick="showQuizOptions('Week 34', 'questionbank/hrac111week34.txt', 'questionbank/hrac111week34answer.txt')"
+                id="btn-Week3"
+                onclick="showQuizOptions('Week 3', 'questionbank/hrac112week3.txt', 'questionbank/hrac112week3answer.txt')"
                 class="unit-button">
-                Week 34
+                Week 3
             </button>
-            <span id="score-Week34" class="score-bubble"></span>
+            <span id="score-Week3" class="score-bubble"></span>
         </div>
 
         <div class="button-wrapper"> 
             <button 
-                id="btn-Week5"
-                onclick="showQuizOptions('Week 5', 'questionbank/hrac111week5.txt', 'questionbank/hrac111week5answer.txt')"
+                id="btn-Week4"
+                onclick="showQuizOptions('Week 4', 'questionbank/hrac112week4.txt', 'questionbank/hrac112week4answer.txt')"
                 class="unit-button">
-                Week 5
+                Week 4
             </button>
-            <span id="score-Week5" class="score-bubble"></span>
+            <span id="score-Week4" class="score-bubble"></span>
         </div>
 
     </div>
@@ -79,14 +69,12 @@
     </div>
     
     <script>
-        // This is the ONLY code that should remain in the HTML file, 
-        // as it is unique to HRAC 111 (or whichever courses you are tracking here).
+        // This array defines the quizzes on this page for the score tracking logic.
         const pageQuizzes = [
-            { title: 'Quiz 1', spanId: 'score-Quiz1', defaultTotal: 40 },
             { title: 'Week 1', spanId: 'score-Week1', defaultTotal: 40 },
             { title: 'Week 2', spanId: 'score-Week2', defaultTotal: 40 },
-            { title: 'Week 34', spanId: 'score-Week34', defaultTotal: 40 },
-            { title: 'Week 5', spanId: 'score-Week5', defaultTotal: 40 },
+            { title: 'Week 3', spanId: 'score-Week3', defaultTotal: 40 },
+            { title: 'Week 4', spanId: 'score-Week4', defaultTotal: 40 },
         ];
     </script>
     
