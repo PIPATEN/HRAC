@@ -1,0 +1,250 @@
+What is thermal energy created by? (Page 3)
+The chemical bonds between atoms
+The random motion of molecules and atoms
+The pressure exerted on a system
+The weight of a substance
+Heat is defined in the context of thermal energy as what? (Page 4)
+A form of potential energy
+A measure of temperature
+A form of thermal energy
+The absence of cold
+In which direction does heat always flow? (Page 5)
+From highest energy level (hot) to lowest energy level (cold)
+From lowest energy level (cold) to highest energy level (hot)
+From a liquid to a solid
+From a gas to a liquid
+Heat transfer ceases between physical systems when what is reached? (Page 5)
+When the pressure equalizes
+When one object is insulated
+When one object becomes a gas
+When thermal equilibrium is reached
+Which of the following is NOT one of the three fundamental modes of heat transfer? (Page 6)
+Conduction
+Convection
+Radiation
+Evaporation
+Conduction is the transfer of energy between objects that are in what state? (Page 7)
+A vacuum
+Physical contact
+Gaseous form
+Different temperature scales
+What causes the rising and falling current called convection in a liquid or gas? (Page 8)
+The substance is stirred by an external force only
+The substance cools, becomes less dense, and rises
+The substance heats up, becomes denser, and falls
+The substance heats up, becomes less dense, and rises
+What is used to create an artificially induced convection current in forced convection? (Page 9)
+External means like fans or pumps
+Buoyancy forces
+Density variations due to temperature
+Natural aspiration
+How does thermal radiation propagate? (Page 10)
+Through conduction via air molecules
+Through convection currents in the atmosphere
+Without the presence of matter through a vacuum
+It requires a fluid medium to travel
+The rate of heat transfer is dependent on the temperature difference and what other factor? (Page 11)
+The color of the objects
+The atmospheric pressure
+The properties of the intervening medium
+The volume of the objects
+What is the primary purpose of insulation in relation to heat transfer? (Page 12)
+To impede heat transfer
+To increase heat transfer
+To create heat
+To change the state of matter
+What is a phase transition? (Page 15)
+A change in temperature without a change of state
+A change from one state of matter to another by heat transfer
+A change in pressure within a closed system
+The process of reaching thermal equilibrium
+Boiling is the phase transition from which state to which state? (Page 16)
+Solid to Liquid
+Liquid to Vapour
+Vapour to Liquid
+Solid to Vapour
+What is another term for saturation temperature? (Page 16)
+Boiling point
+Freezing point
+Melting point
+Dew point
+Condensation is the phase transition from which state to which state? (Page 17)
+Liquid to Solid
+Solid to Liquid
+Vapour to Liquid
+Liquid to Vapour
+During condensation, what type of heat must be released? (Page 17)
+Sensible heat
+Specific heat
+Kinetic energy
+Latent heat of vaporization
+What are the two types of heat that describe thermal energy transfer? (Page 19)
+Direct and Indirect
+Conduction and Convection
+Sensible and Latent
+Solar and Geothermal
+Sensible heat is the heat that causes what kind of change in a substance? (Page 20)
+A change of state
+A change in pressure
+A temperature change
+A change in volume
+What is the correct formula to calculate the quantity of sensible heat (Q)? (Page 20)
+Q = m x L
+Q = c x m x ΔT
+Q = P x V
+Q = F x d
+What is the definition of Specific Heat Capacity? (Page 21)
+The heat required to change the state of a substance
+The total heat contained within a substance
+The heat required to raise the temperature of a unit mass of a substance by one degree
+The rate at which a substance transfers heat
+What is the specific heat of water in its liquid state? (Page 30)
+0.5 Btu/lb·°F
+1 Btu/lb·°F
+144 Btu/lb
+970 Btu/lb
+How much heat is needed to raise 10 lbs of water from 40°F to 100°F? (Page 25)
+400 Btu
+1000 Btu
+600 Btu
+1400 Btu
+How much heat is required to heat 10 pounds of steel from 40°F to 100°F, if the specific heat of steel is 0.116 Btu/lb·°F? (Page 25)
+69.6 Btu
+116 Btu
+600 Btu
+46.4 Btu
+Latent heat is the heat added to a substance that is required to make it do what? (Page 27)
+Change state
+Increase in temperature
+Increase in pressure
+Stop molecular motion
+What happens to the temperature of a substance during a phase change? (Page 27)
+It increases rapidly
+It remains constant
+It decreases rapidly
+It fluctuates
+What is the value for the specific latent heat of fusion for water? (Page 30)
+970 Btu/lb
+1 Btu/lb
+0.5 Btu/lb
+144 Btu/lb
+What is the value for the specific latent heat of vaporization for water at atmospheric pressure? (Page 30)
+970 Btu/lb
+144 Btu/lb
+1 Btu/lb·°F
+212 Btu/lb
+How much heat is needed to melt 2 lbs of 32°F ice into 32°F water? (Page 28)
+144 Btu
+288 Btu
+64 Btu
+32 Btu
+How much heat is needed to convert 10 lbs of 212°F water to 212°F vapour? (Page 28)
+970 Btu
+2120 Btu
+9700 Btu
+1000 Btu
+What is the specific heat value for water in its solid state (ice)? (Page 30)
+1.0 Btu/lb·°F
+0.5 Btu/lb·°F
+144 Btu/lb
+32 Btu/lb·°F
+What is the specific heat value for water in its vapour state (steam)? (Page 30)
+1.0 Btu/lb·°F
+0.5 Btu/lb·°F
+970 Btu/lb
+212 Btu/lb·°F
+On the temperature vs. heat energy graph for water, what does the horizontal line at 32°F (0°C) represent? (Page 31)
+Heating of solid ice
+Melting of ice into water
+Heating of liquid water
+Boiling of water into steam
+On the temperature vs. heat energy graph for water, what does the horizontal line at 212°F (100°C) represent? (Page 31)
+Condensation
+Heating of liquid water
+Vaporization
+Heating of steam
+What is the first step in calculating the heat required to raise 10 lbs of water from 182°F to 214°F? (Page 32)
+Calculate the latent heat of vaporization at 212°F.
+Calculate the sensible heat required to heat the liquid from 182°F to 212°F.
+Calculate the sensible heat required to heat the vapour from 212°F to 214°F.
+Calculate the total heat directly using a single formula.
+How much sensible heat is required to raise 10 lbs of water from 182°F to 212°F? (Page 32)
+1820 Btu
+2120 Btu
+300 Btu
+9700 Btu
+How much latent heat is required to turn 10 lbs of 212°F water into 212°F vapour? (Page 32)
+970 Btu
+9700 Btu
+300 Btu
+10 Btu
+How much sensible heat is required to raise 10 lbs of 212°F vapour to 214°F vapour? (Page 32)
+10 Btu
+20 Btu
+100 Btu
+500 Btu
+What is the total heat required to raise 10 lbs of water from 182°F to 214°F? (Page 32)
+9700 Btu
+10000 Btu
+10010 Btu
+310 Btu
+When removing heat from 1500 lbs of water from 34°F to 20°F, how much sensible heat is removed to cool the water to 32°F? (Page 33)
+1500 Btu
+3000 Btu
+216,000 Btu
+9000 Btu
+What is the latent heat removed to change 1500 lbs of 32°F water to 32°F ice? (Page 33)
+144,000 Btu
+3,000 Btu
+216,000 Btu
+9,000 Btu
+What is the sensible heat removed to cool 1500 lbs of 32°F ice to 20°F ice? (Page 33)
+1500 Btu
+3000 Btu
+9000 Btu
+216,000 Btu
+What is the total heat that must be removed from 1500 pounds of water to change it from 34°F to 20°F? (Page 33)
+219,000 Btu
+225,000 Btu
+228,000 Btu
+12,000 Btu
+What is the state called when two objects in contact reach the same temperature and no longer exchange heat? (Page 34)
+Phase transition
+Saturation
+Thermal equilibrium
+Convection current
+When a hot object is placed in cooler water within an isolated system, which statement is true? (Page 34)
+Heat lost by the hot object is greater than heat gained by the water.
+Heat lost by the hot object is less than heat gained by the water.
+Heat lost by the hot object equals the heat gained by the water.
+There is no relationship between the heat lost and gained.
+In the equilibrium temperature calculation, what does ΔTs represent (where Ti-s is the initial temperature of the steel and Te is the equilibrium temperature)? (Page 34)
+Te – Ti-s
+Ti-s – Te
+Ti-w – Te
+Te – Ti-w
+In the example problem, what is the formula for the heat lost by the steel (Qs)? (Page 35)
+Qs = Cw x ms x (Te – 150)
+Qs = Cs x ms x (Te – 150)
+Qs = Cs x ms x (150 – Te)
+Qs = Cw x mw x (150 – Te)
+In the example problem, what is the formula for the heat gained by the water (Qw)? (Page 35)
+Qw = Cw x mw x (Te – 65)
+Qw = Cw x mw x (65 – Te)
+Qw = Cs x mw x (Te – 65)
+Qw = Cw x ms x (Te – 65)
+What is the final equilibrium temperature (Te) when a 3 lb piece of steel at 150°F is dropped into 2 lb of water at 65°F? (Page 35)
+65.0 °F
+150.0 °F
+107.5 °F
+77.6 °F
+The venting of some furnaces using convection currents is also known as what? (Page 8)
+Forced convection
+Natural aspiration
+Thermal radiation
+Conductive heating
+What is the property of a material to conduct heat called? (Page 7)
+Thermal equilibrium
+Specific heat
+Thermal conductivity
+Latent heat capacity

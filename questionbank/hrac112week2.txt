@@ -1,0 +1,250 @@
+Heat is defined as what type of motion? (Page 4)
+Motion of molecules
+Motion of atoms
+Motion of electrons
+Motion of heat
+Heat travels in which direction? (Page 4)
+From a cooler substance to a warmer substance
+From a warmer substance to a cooler substance
+Only via conduction
+In a cyclical pattern
+One $\text{BTU}$ is the amount of heat required to raise the temperature of one pound of water by how many degrees Fahrenheit? (Page 4)
+$10$ degrees
+$5$ degrees
+$1$ degree
+$1.8$ degrees
+One calorie is the amount of heat required to raise the temperature of one gram of water by how many degrees Celsius? (Page 5)
+$1^\circ\text{C}$
+$1.8^\circ\text{C}$
+$5^\circ\text{C}$
+$10^\circ\text{C}$
+One $\text{BTU}$ is equivalent to approximately how many joules? (Page 5)
+$4.184\text{ joules}$
+$252.2\text{ joules}$
+$746\text{ joules}$
+$1055\text{ joules}$
+One $\text{BTU}$ is equivalent to approximately how many calories? (Page 5)
+$4.184\text{ calories}$
+$1055\text{ calories}$
+$252.2\text{ calories}$
+$12000\text{ calories}$
+Temperature sensation is described as a what type of measurement? (Page 6)
+Absolute
+Relative
+Exact
+Unreliable
+Which two main scales of temperature measurement are introduced first in the lecture? (Page 7)
+Fahrenheit and Celsius
+Kelvin and Rankine
+Fahrenheit and Rankine
+Celsius and Kelvin
+What is the boiling point of pure water at sea level on the Fahrenheit scale? (Page 8)
+$100^\circ\text{F}$
+$32^\circ\text{F}$
+$373^\circ\text{F}$
+$212^\circ\text{F}$
+What is the freezing point of pure water on the Celsius scale? (Page 8)
+$32^\circ\text{C}$
+$-273^\circ\text{C}$
+$0^\circ\text{C}$
+$212^\circ\text{C}$
+What is the temperature at absolute zero on the Celsius scale? (Page 8)
+$-460^\circ\text{C}$
+$-273^\circ\text{C}$
+$0^\circ\text{C}$
+$-32^\circ\text{C}$
+Who discovered the first reliable temperature scale in 1724, which is widely used in North American $\text{HVAC}$? (Page 9)
+Lord Kelvin
+Anders Celsius
+Jean-Pierre Christen
+Daniel Gabriel Fahrenheit
+The temperature scale originally known as Centigrade was officially renamed "Celsius" in what year? (Page 10)
+1743
+1948
+1724
+1848
+After whom was the Celsius scale eventually named? (Page 10)
+Jean-Pierre Christen
+Lord Kelvin
+Anders Celsius
+William Rankine
+The Celsius scale has a resolution how many times greater than the Fahrenheit scale? (Page 11)
+$10$ times
+$1.8$ times
+$9/5$ times
+$273$ times
+What is the correct formula to convert Celsius temperature ($\text{}^{\circ}\text{C}$) to Fahrenheit temperature ($\text{}^{\circ}\text{F}$)? (Page 12)
+$\text{}^{\circ}\text{F} = (1.8 \times \text{}^{\circ}\text{C}) + 32$
+$\text{}^{\circ}\text{F} = \text{}^{\circ}\text{C} + 273$
+$\text{}^{\circ}\text{F} = (\text{}^{\circ}\text{C} - 32) \times 1.8$
+$\text{}^{\circ}\text{F} = \text{}^{\circ}\text{C} + 460$
+What is the correct formula to convert Fahrenheit temperature ($\text{}^{\circ}\text{F}$) to Celsius temperature ($\text{}^{\circ}\text{C}$)? (Page 12)
+$\text{}^{\circ}\text{C} = (1.8 \times \text{}^{\circ}\text{F}) + 32$
+$\text{}^{\circ}\text{C} = \text{}^{\circ}\text{F} - 273$
+$\text{}^{\circ}\text{C} = \text{}^{\circ}\text{F} - 460$
+$\text{}^{\circ}\text{C} = (\text{}^{\circ}\text{F} - 32) / 1.8$
+Who first pioneered the concept of absolute zero? (Page 13)
+Lord Kelvin
+Robert Boyle
+William Rankine
+Anders Celsius
+Which two temperature scales start at absolute zero? (Page 13)
+Fahrenheit and Celsius
+Celsius and Kelvin
+Rankine and Kelvin
+Fahrenheit and Rankine
+The Kelvin scale is based on which other temperature table? (Page 14)
+Centigrade (Celsius)
+Fahrenheit
+Rankine
+Absolute
+The Rankine scale was first proposed by William Rankine in 1859 to allow use of absolute zero in which temperature scale? (Page 15)
+Celsius
+Fahrenheit
+Kelvin
+Centigrade
+What is the correct formula to convert Fahrenheit to Rankine? (Page 16)
+$\text{}^{\circ}\text{R} = \text{}^{\circ}\text{F} - 460$
+$\text{}^{\circ}\text{R} = \text{}^{\circ}\text{F} / 1.8$
+$\text{}^{\circ}\text{R} = \text{}^{\circ}\text{F} + 460$
+$\text{}^{\circ}\text{R} = (1.8 \times \text{}^{\circ}\text{F}) + 32$
+What is the correct formula to convert Celsius to Kelvin? (Page 16)
+$\text{K} = \text{}^{\circ}\text{C} + 273$
+$\text{K} = \text{}^{\circ}\text{C} - 273$
+$\text{K} = (\text{}^{\circ}\text{C} \times 1.8) + 32$
+$\text{K} = \text{}^{\circ}\text{C} / 1.8$
+At what temperature are the Celsius and Fahrenheit scales numerically the same? (Page 17)
+$0^\circ$
+$32^\circ$
+$100^\circ$
+$-40^\circ$
+Convert $77^\circ\text{F}$ to Celsius. ($\text{}^{\circ}\text{C} = (\text{}^{\circ}\text{F} - 32) / 1.8$) (Calculation based on Page 12)
+$45^\circ\text{C}$
+$180^\circ\text{C}$
+$25^\circ\text{C}$
+$250^\circ\text{C}$
+Convert $30^\circ\text{C}$ to Fahrenheit. ($\text{}^{\circ}\text{F} = (1.8 \times \text{}^{\circ}\text{C}) + 32$) (Calculation based on Page 12)
+$86^\circ\text{F}$
+$62^\circ\text{F}$
+$34.4^\circ\text{F}$
+$54^\circ\text{F}$
+Convert $80^\circ\text{F}$ to Rankine. ($\text{}^{\circ}\text{R} = \text{}^{\circ}\text{F} + 460$) (Calculation based on Page 16)
+$520^\circ\text{R}$
+$540^\circ\text{R}$
+$540^\circ\text{R}$
+$380^\circ\text{R}$
+Convert $27^\circ\text{C}$ to Kelvin. ($\text{K} = \text{}^{\circ}\text{C} + 273$) (Calculation based on Page 16)
+$246\text{ K}$
+$273\text{ K}$
+$300\text{ K}$
+$310\text{ K}$
+Which of the following is NOT listed as a type of temperature measuring instrument? (Page 20)
+Thermocouples
+Thermistors
+RTDs
+Manometers
+The fundamental principle of a thermocouple relies on joining two types of what? (Page 21)
+Dissimilar metals
+Non-conductive polymers
+Semiconductor chips
+Resistive coils
+The current flow in a thermocouple is the result of the difference in what force developed at the two junctions? (Page 21)
+Magnetic force
+Electromotive force
+Centrifugal force
+Frictional force
+Resistance Temperature Devices ($\text{RTD}$) are typically made of wire-wound resistors using pure metal or what other material? (Page 22)
+Ceramics
+Semiconductors
+Alkylbenzene
+Alloy
+Thermistors are made of what kind of materials? (Page 23)
+Insulators
+Semiconductor materials
+Pure metals (e.g., Platinum)
+Alloys (e.g., Nickel)
+A Positive Temperature Coefficient ($\text{PTC}$) thermistor is one where resistance does what as temperature increases? (Page 23)
+Resistance increases
+Resistance decreases
+Resistance remains constant
+Resistance is zero
+A Negative Temperature Coefficient ($\text{NTC}$) thermistor is one where resistance does what as temperature increases? (Page 23)
+Resistance increases
+Resistance decreases
+Resistance remains constant
+Resistance is zero
+An $\text{IC}$ Temperature Sensor produces an output voltage/current proportional to which type of temperature? (Page 24)
+Gauge temperature
+Sensible temperature
+Relative temperature
+Absolute temperature
+Which temperature sensor is described in the comparison table as the "most stable" and "most accurate"? (Page 25)
+Thermocouple
+$\text{RTD}$ (Resistance Temperature Device)
+Thermistor
+$\text{IC}$ Sensor
+Which temperature sensor's disadvantages include being "fragile" and having a "limited temperature range"? (Page 25)
+Thermistor
+$\text{RTD}$ (Resistance Temperature Device)
+Thermocouple
+$\text{IC}$ Sensor
+Pressure is defined as the what per unit of area? (Page 28)
+Volume
+Mass
+Force
+Weight
+In the refrigeration and air conditioning trade, pressure is normally expressed in what units? (Page 28)
+Pounds per square inch ($\text{psi}$)
+Newtons per square meter ($\text{Pa}$)
+Inches of mercury ($\text{in-Hg}$)
+Pounds per cubic foot ($\text{lb}/\text{ft}^3$)
+What is the pressure exerted by one foot of water depth, given that a cubic foot of water weighs $62.4\text{ lbs}$? (Page 30)
+$1.0\text{ psi}$
+$0.433\text{ psi}$
+$62.4\text{ psi}$
+$14.7\text{ psi}$
+A pressure gauge reads $0\text{ psi}$ when opened to what? (Page 32)
+A vacuum pump
+A closed system
+The atmosphere
+A high-pressure line
+What internal component of a pressure gauge tends to straighten out as pressure increases? (Page 32)
+Diaphragm
+Capillary tube
+Needle linkage
+Bourdon tube
+Atmospheric pressure is measured with an instrument called a what? (Page 33)
+Barometer
+Psychrometer
+Thermocouple
+Manifold gauge
+The standard atmospheric pressure at sea level is agreed upon as what value? (Page 33)
+$1.0\text{ lb}/\text{sq}\text{. in.}$
+$29.92\text{ in-Hg}$
+$14.7\text{ lb}/\text{sq}\text{. in.}$
+$760\text{ in-Hg}$
+What is the formula for converting gauge pressure ($\text{psig}$) to absolute pressure ($\text{psia}$)? (Page 35)
+$\text{psia} = \text{psig} - 14.7$
+$\text{psia} = \text{psig} + 14.7$
+$\text{psia} = \text{psig} \times 14.7$
+$\text{psia} = \text{psig} / 14.7$
+When the pressure above a liquid decreases, what happens to its boiling point? (Page 37)
+It decreases
+It increases
+It remains the same
+It becomes unpredictable
+When water is actively boiling, what happens to its temperature? (Page 37)
+It rises
+It drops
+It fluctuates rapidly
+It remains the same
+The condition where refrigerant liquid and vapor are both present, and the refrigerant is neither evaporating nor condensing, is called the what state? (Page 40)
+Superheated state
+Subcooled state
+Saturation state
+Critical state
+For refrigeration system evacuation, vacuum is often measured in which small unit? (Page 45)
+Microns ($\mu$)
+Pounds per square inch ($\text{psi}$)
+Degrees Rankine ($\text{}^{\circ}\text{R}$)
+Inches of water ($\text{in-H}_2\text{O}$)
