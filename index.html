@@ -100,35 +100,33 @@
             hideQuizOptions();
             let params;
 
-            // Class 111 Quizzes
+            // CORRECTED: Removed leading slashes from all file paths
             if (currentQuizId === 'class111_quiz1') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac111quiz1.txt', afile: '/questionbank/hrac111quiz1answer.txt', title: `HRAC 111 - Quiz 1 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac111quiz1.txt', afile: 'questionbank/hrac111quiz1answer.txt', title: `HRAC 111 - Quiz 1 Practice`, count: count });
             } else if (currentQuizId === 'class111_test1') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac111test1.txt', afile: '/questionbank/hrac111test1answer.txt', title: `HRAC 111 - Test 1 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac111test1.txt', afile: 'questionbank/hrac111test1answer.txt', title: `HRAC 111 - Test 1 Practice`, count: count });
             } else if (currentQuizId === 'class111_week1') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac111week1.txt', afile: '/questionbank/hrac111week1answer.txt', title: `HRAC 111 - Week 1 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac111week1.txt', afile: 'questionbank/hrac111week1answer.txt', title: `HRAC 111 - Week 1 Practice`, count: count });
             } else if (currentQuizId === 'class111_week2') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac111week2.txt', afile: '/questionbank/hrac111week2answer.txt', title: `HRAC 111 - Week 2 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac111week2.txt', afile: 'questionbank/hrac111week2answer.txt', title: `HRAC 111 - Week 2 Practice`, count: count });
             } else if (currentQuizId === 'class111_week3_4') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac111week34.txt', afile: '/questionbank/hrac111week34answer.txt', title: `HRAC 111 - Week 3&4 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac111week34.txt', afile: 'questionbank/hrac111week34answer.txt', title: `HRAC 111 - Week 3&4 Practice`, count: count });
             } else if (currentQuizId === 'class111_week5') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac111week5.txt', afile: '/questionbank/hrac111week5answer.txt', title: `HRAC 111 - Week 5 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac111week5.txt', afile: 'questionbank/hrac111week5answer.txt', title: `HRAC 111 - Week 5 Practice`, count: count });
             } 
-            // Class 112 Quizzes
-            else if (currentQuizId === 'class112_test1') { // **ADDED THIS BLOCK**
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac112test1.txt', afile: '/questionbank/hrac112test1answer.txt', title: `HRAC 112 - Test 1 Practice`, count: count });
+            else if (currentQuizId === 'class112_test1') {
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac112test1.txt', afile: 'questionbank/hrac112test1answer.txt', title: `HRAC 112 - Test 1 Practice`, count: count });
             } else if (currentQuizId === 'class112_week1') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac112week1.txt', afile: '/questionbank/hrac112week1answer.txt', title: `HRAC 112 - Week 1 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac112week1.txt', afile: 'questionbank/hrac112week1answer.txt', title: `HRAC 112 - Week 1 Practice`, count: count });
             } else if (currentQuizId === 'class112_week2') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac112week2.txt', afile: '/questionbank/hrac112week2answer.txt', title: `HRAC 112 - Week 2 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac112week2.txt', afile: 'questionbank/hrac112week2answer.txt', title: `HRAC 112 - Week 2 Practice`, count: count });
             } else if (currentQuizId === 'class112_week3') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac112week3.txt', afile: '/questionbank/hrac112week3answer.txt', title: `HRAC 112 - Week 3 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac112week3.txt', afile: 'questionbank/hrac112week3answer.txt', title: `HRAC 112 - Week 3 Practice`, count: count });
             } else if (currentQuizId === 'class112_week4') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac112week4.txt', afile: '/questionbank/hrac112week4answer.txt', title: `HRAC 112 - Week 4 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac112week4.txt', afile: 'questionbank/hrac112week4answer.txt', title: `HRAC 112 - Week 4 Practice`, count: count });
             } else if (currentQuizId === 'class112_week5') {
-                 params = new URLSearchParams({ qfile: '/questionbank/hrac112week5.txt', afile: '/questionbank/hrac112week5answer.txt', title: `HRAC 112 - Week 5 Practice`, count: count });
+                 params = new URLSearchParams({ qfile: 'questionbank/hrac112week5.txt', afile: 'questionbank/hrac112week5answer.txt', title: `HRAC 112 - Week 5 Practice`, count: count });
             }
-            // Fallback
             else {
                 alert('This practice session is not yet implemented.');
                 return;
@@ -141,35 +139,33 @@
             hideQuizOptions();
             let params;
             
-            // Class 111 Tests
+            // CORRECTED: Removed leading slashes from all file paths
             if (currentQuizId === 'class111_quiz1') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac111quiz1.txt', afile: '/questionbank/hrac111quiz1answer.txt', title: 'HRAC 111 - Quiz 1 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac111quiz1.txt', afile: 'questionbank/hrac111quiz1answer.txt', title: 'HRAC 111 - Quiz 1 Test' });
             } else if (currentQuizId === 'class111_test1') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac111test1.txt', afile: '/questionbank/hrac111test1answer.txt', title: 'HRAC 111 - Test 1' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac111test1.txt', afile: 'questionbank/hrac111test1answer.txt', title: 'HRAC 111 - Test 1' });
             } else if (currentQuizId === 'class111_week1') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac111week1.txt', afile: '/questionbank/hrac111week1answer.txt', title: 'HRAC 111 - Week 1 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac111week1.txt', afile: 'questionbank/hrac111week1answer.txt', title: 'HRAC 111 - Week 1 Test' });
             } else if (currentQuizId === 'class111_week2') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac112week2.txt', afile: '/questionbank/hrac112week2answer.txt', title: 'HRAC 111 - Week 2 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac112week2.txt', afile: 'questionbank/hrac112week2answer.txt', title: 'HRAC 111 - Week 2 Test' });
             } else if (currentQuizId === 'class111_week3_4') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac111week34.txt', afile: '/questionbank/hrac111week34answer.txt', title: 'HRAC 111 - Week 3&4 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac111week34.txt', afile: 'questionbank/hrac111week34answer.txt', title: 'HRAC 111 - Week 3&4 Test' });
             } else if (currentQuizId === 'class111_week5') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac111week5.txt', afile: '/questionbank/hrac111week5answer.txt', title: 'HRAC 111 - Week 5 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac111week5.txt', afile: 'questionbank/hrac111week5answer.txt', title: 'HRAC 111 - Week 5 Test' });
             } 
-            // Class 112 Tests
-            else if (currentQuizId === 'class112_test1') { // **ADDED THIS BLOCK**
-                params = new URLSearchParams({ qfile: '/questionbank/hrac112test1.txt', afile: '/questionbank/hrac112test1answer.txt', title: 'HRAC 112 - Test 1' });
+            else if (currentQuizId === 'class112_test1') {
+                params = new URLSearchParams({ qfile: 'questionbank/hrac112test1.txt', afile: 'questionbank/hrac112test1answer.txt', title: 'HRAC 112 - Test 1' });
             } else if (currentQuizId === 'class112_week1') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac112week1.txt', afile: '/questionbank/hrac112week1answer.txt', title: 'HRAC 112 - Week 1 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac112week1.txt', afile: 'questionbank/hrac112week1answer.txt', title: 'HRAC 112 - Week 1 Test' });
             } else if (currentQuizId === 'class112_week2') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac112week2.txt', afile: '/questionbank/hrac112week2answer.txt', title: 'HRAC 112 - Week 2 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac112week2.txt', afile: 'questionbank/hrac112week2answer.txt', title: 'HRAC 112 - Week 2 Test' });
             } else if (currentQuizId === 'class112_week3') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac112week3.txt', afile: '/questionbank/hrac112week3answer.txt', title: 'HRAC 112 - Week 3 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac112week3.txt', afile: 'questionbank/hrac112week3answer.txt', title: 'HRAC 112 - Week 3 Test' });
             } else if (currentQuizId === 'class112_week4') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac112week4.txt', afile: '/questionbank/hrac112week4answer.txt', title: 'HRAC 112 - Week 4 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac112week4.txt', afile: 'questionbank/hrac112week4answer.txt', title: 'HRAC 112 - Week 4 Test' });
             } else if (currentQuizId === 'class112_week5') {
-                params = new URLSearchParams({ qfile: '/questionbank/hrac112week5.txt', afile: '/questionbank/hrac112week5answer.txt', title: 'HRAC 112 - Week 5 Test' });
+                params = new URLSearchParams({ qfile: 'questionbank/hrac112week5.txt', afile: 'questionbank/hrac112week5answer.txt', title: 'HRAC 112 - Week 5 Test' });
             }
-            // Fallback
             else {
                 alert('This specific test is not yet implemented.');
                 return;
