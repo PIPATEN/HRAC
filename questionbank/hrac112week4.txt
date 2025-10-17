@@ -1,0 +1,200 @@
+According to the lecture, the four gas laws provide a fundamental understanding of what process in the refrigeration cycle? (Page 3)
+Heat absorption in the evaporator
+Expansion in the metering device
+Compression of gas
+Heat rejection in the condenser
+Why must all pressures and temperatures be converted to absolute scales when working with gas laws? (Page 4)
+To simplify the mathematical calculations.
+Because all energy and motion start immediately above absolute 0.
+To account for atmospheric humidity.
+It is a requirement of the metric system only.
+When working with gas laws in inch-pound units, which scales must be used? (Page 4)
+psig and Fahrenheit
+psia and Celsius
+psia and Rankine
+psig and Kelvin
+What is the correct formula to convert a temperature from degrees Fahrenheit (°F) to Rankine (°R)? (Page 5)
+°R = °F - 460
+°R = (°F - 32) / 1.8
+°R = °F + 460
+°R = 1.8 * °F + 32
+What is the correct formula to convert a pressure from pounds per square inch gauge (psig) to pounds per square inch absolute (psia)? (Page 5)
+psia = psig - 14.7
+psia = psig * 14.7
+psia = psig / 14.7
+psia = psig + 14.7
+Boyle's Law states that for a constant temperature process, what is the relationship between pressure and volume? (Page 7)
+They are directly proportional.
+They are inversely proportional.
+They have no relationship.
+They are equal to each other.
+Which of the following variables is held constant when applying Boyle's Law? (Page 7)
+Pressure
+Volume
+Temperature
+Mass
+What is the correct formula for Boyle's Law? (Page 7)
+P1 / V1 = P2 / V2
+P1 * T1 = P2 * T2
+P1 * V2 = P2 * V1
+P1 * V1 = P2 * V2
+In the Boyle's Law example, a cylinder with an initial volume of 2 ft³ and pressure of 15 psig is reduced to 1 ft³. What is the new pressure in psig? (Page 8)
+29.7 psig
+59.4 psig
+44.7 psig
+15.0 psig
+Charles' Law deals with the effect of which variable on gasses? (Page 9)
+Pressure
+Volume
+Density
+Temperature
+According to Charles' law for a constant pressure process, the volume of a gas varies in what way with the absolute temperature? (Page 9)
+Inversely
+Directly
+Exponentially
+Logarithmically
+What is the correct formula for Charles’ Law when pressure is held constant? (Page 10)
+V1 * T1 = V2 * T2
+V1 / T1 = V2 / T2
+P1 * V1 = P2 * V2
+V1 * T2 = V2 * T1
+In the Charles' Law (constant pressure) example, a vessel at 560 °R with a volume of 4 units is reduced to 2 units. What is the final temperature? (Page 10)
+1120 °R
+560 °R
+280 °R
+140 °R
+According to Charles' law for a constant volume process, the pressure of a gas varies in what way with the absolute temperature? (Page 11)
+Directly
+Inversely
+Quadratically
+There is no change.
+What is the correct formula for Charles’ Law when volume is held constant? (Page 11)
+P1 * T1 = P2 * T2
+P1 / V1 = P2 / V2
+P1 / T1 = P2 / T2
+P1 * T2 = P2 * T1
+In the Charles' Law (constant volume) example, a vessel with an initial pressure of 100 psia and temperature of 560 °R is increased to 200 psia. What is the new temperature? (Page 11)
+280 °R
+560 °R
+840 °R
+1120 °R
+The Perfect Gas Law, also known as the General Gas Law, is a combination of which two laws? (Page 12)
+Boyle's Law and Dalton's Law
+Charles' Law and Dalton's Law
+Boyle's Law and Charles' Law
+Lussac's Law and Dalton's Law
+The Perfect Gas Law is used to describe real-life actions in a compressor where which conditions are met? (Page 12)
+Only pressure and volume vary.
+Only volume and temperature vary.
+All three variables (pressure, volume, temperature) are constant.
+All three variables (pressure, volume, temperature) constantly vary.
+What is the base formula for the Perfect Gas Law? (Page 14)
+(P1 * T1) / V1 = (P2 * T2) / V2
+(P1 * V1) / T1 = (P2 * V2) / T2
+P1 * V1 * T1 = P2 * V2 * T2
+(T1 * V1) / P1 = (T2 * V2) / P2
+In the Perfect Gas Law problem, a cylinder with 20 ft³ of gas at 100°F and 50 psig is connected to a 30 ft³ container. What is the final volume (V2)? (Page 15)
+20 ft³
+30 ft³
+50 ft³
+10 ft³
+In the Perfect Gas Law problem, what is the first step performed before using the formula? (Page 15)
+Convert the volume to cubic meters.
+Convert the temperatures to Rankine and pressure to absolute.
+Calculate the final pressure directly.
+Combine the volumes.
+In the Perfect Gas Law example, what is the initial absolute pressure (P1) after converting 50 psig? (Page 15)
+35.3 psia
+50.0 psia
+64.7 psia
+14.7 psia
+In the Perfect Gas Law example, what is the initial absolute temperature (T1) after converting 100°F? (Page 15)
+460°R
+100°R
+560°R
+373°R
+After calculating with the Perfect Gas Law formula in the example, the final absolute pressure (P2) is found to be 24.95 psia. What is this value in gauge pressure (psig)? (Page 16)
+39.65 psig
+24.95 psig
+10.26 psig
+-10.26 psig
+What does Dalton’s Law of Partial Pressures state? (Page 18)
+The total pressure of a gas mixture is the average of the individual gas pressures.
+The total pressure of a confined mixture of gasses is the sum of the pressures of each gas.
+The pressure of a gas is inversely proportional to its volume.
+All gasses in a mixture exert the same pressure.
+In the Earth's atmosphere, which gas provides the largest percentage (78.04%) of the total pressure? (Page 18)
+Oxygen
+Argon
+Nitrogen
+Carbon Dioxide
+Dalton’s Law helps to explain the principles behind dew point and which other refrigeration process? (Page 18)
+Compression refrigeration
+Vapor-compression cycle
+Absorption refrigeration
+Thermoelectric cooling
+According to the principles of Dalton's Law, what happens when water vapor in the air is exposed to a surface with a temperature below the water vapor's dew point? (Page 19)
+The vapor superheats.
+The vapor freezes instantly.
+The vapor condenses into a liquid.
+The surface temperature increases.
+Which temperature measurement, used to express the total amount of heat in the air, is a phenomenon explained by Dalton's Law? (Page 19)
+Dry bulb temperature
+Wet bulb temperature
+Dew point temperature
+Absolute temperature
+To convert a temperature of 60°F to Rankine, what is the correct calculation? (Page 5)
+60 + 273 = 333°R
+(60 - 32) / 1.8 = 15.6°R
+60 + 460 = 520°R
+1.8 * 60 + 32 = 140°R
+A pressure gauge reads 96 psig. What is the absolute pressure? (Page 5)
+81.3 psia
+96 psia
+110.7 psia
+125.4 psia
+If the pressure on a gas increases from 100 PSIA to 200 PSIA while the temperature remains at 520°R, what happens to the volume according to Boyle's law? (Page 7)
+It is halved.
+It doubles.
+It remains the same.
+It is quartered.
+The volume portion of Charles' law is also associated with which other scientist's law? (Page 9)
+Boyle's Law
+Dalton's Law
+Guy-Lussac's law
+Perfect Gas Law
+What is a "perfect gas" as described in the lecture? (Page 12)
+A gas that exists at standard temperature and pressure.
+A real gas used in refrigeration systems.
+A theoretical gas with behavior more simplified than an ideal gas.
+A gas mixture containing nitrogen and oxygen.
+In Dalton's Law, the pressure exerted by each individual gas in a mixture is called its: (Page 18)
+Total pressure
+Absolute pressure
+Gauge pressure
+Partial pressure
+If air is a mixture of 78% nitrogen and 21% oxygen (approx.), and the total pressure is 14.7 psia, what is the approximate partial pressure of the nitrogen? (Page 18)
+14.7 psia
+3.08 psia
+11.47 psia
+10.0 psia
+If a gas has its volume reduced at a constant pressure, what must happen to its absolute temperature according to Charles' Law? (Page 10)
+It must increase.
+It must decrease.
+It must remain constant.
+It depends on the type of gas.
+If a gas has its pressure increased at a constant volume, what must happen to its absolute temperature according to Charles' Law? (Page 11)
+It must increase.
+It must decrease.
+It must remain constant.
+It depends on the type of gas.
+Which of the following is NOT one of the four main gas laws discussed in the lecture? (Page 3)
+Boyle’s Law
+Charles’ Law
+Avogadro's Law
+Dalton’s Law
+The Perfect Gas Law is also referred to as the: (Page 12)
+Ideal Gas Equation
+General Gas Law
+Combined Gas Equation
+Partial Pressure Law

@@ -1,0 +1,150 @@
+Refrigerant recovery is mandatory during which two types of operations? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 2)
+Manufacturing and Disposal operations
+Charging and Testing operations
+Service and and installation operations
+Transportation and Storage operations
+Which layer of the atmosphere contains the "good ozone" that shields the earth from excessive amounts of the sun's ultraviolet rays? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 4)
+Troposphere (Ground to 7 miles)
+Ionosphere (30-300 miles)
+Mesosphere (Above 30 miles)
+Stratosphere (7 to 30 miles)
+How many ozone molecules can one chlorine atom released into the atmosphere destroy? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 7)
+One thousand (1,000)
+Ten thousand (10,000)
+One hundred thousand (100,000)
+One million (1,000,000)
+What does the acronym GWP stand for in the context of refrigerants and the environment? (week3,4-Refrigerants - Tagged.pdf, Page 17)
+Global Water Purity
+Greenhouse Weather Pattern
+Gas Waste Prevention
+Global Warming Potential
+Which refrigerant type has a zero Ozone Depletion Potential (ODP)? (week3,4-Refrigerants - Tagged.pdf, Page 14)
+CFCs
+HCFCs
+HFCs
+HCs
+What is the definition of Recover in the context of refrigerant handling? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 15)
+To process recovered refrigerant to new product specifications
+To clean refrigerant for reuse
+To process refrigerant to acceptable specifications for reuse
+To remove refrigerant from a system and store it in an external container
+What is the definition of Reclaim in the context of refrigerant handling? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 15)
+To remove refrigerant from a system and store it
+To process recovered refrigerant to new specifications (chemically clean)
+To clean refrigerant for reuse by removing contaminants
+To reuse refrigerant in a new system immediately
+What is the maximum percentage of capacity that refrigerant cylinders should never be filled? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 20)
+60%
+75%
+80%
+95%
+How often must a recovery cylinder's Department of Transportation (DOT) test date be retested? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 19)
+Every 2 years
+Every 4 years
+Every 5 years
+Every 10 years
+If permitted to accumulate, what is the primary safety hazard posed by refrigerants in a confined space? (week3,4-Refrigerants - Tagged.pdf, Page 2)
+They are highly toxic in their natural state
+They can displace oxygen
+They are spontaneously combustible
+They create toxic fumes at room temperature
+What safety hazard is created when modern refrigerants are burned? (week3,4-Refrigerants - Tagged.pdf, Page 2)
+They become inert
+They turn into water vapor
+Toxic/corrosive gases are created
+They extinguish the fire
+A refrigerant with a lower boiling point tends to have what characteristic? (week3,4-Refrigerants - Tagged.pdf, Page 4)
+A higher operating pressure
+Higher efficiency in smaller machines
+A better ability to cool
+A higher Global Warming Potential (GWP)
+According to ASHRAE Standard 34, a Class B refrigerant is classified as having evidence of toxicity at what concentration? (week3,4-Refrigerants - Tagged.pdf, Page 6)
+At concentrations greater than 400 parts per million (PPM) by volume
+Below 400 ppm by volume
+Only when mixed with oil
+At concentrations less than or equal to 400 PPM by volume
+According to ASHRAE Standard 34, which flammability class is described as "No Flame Propagation"? (week3,4-Refrigerants - Tagged.pdf, Page 7)
+Class 3
+Class 2
+Class 1
+Class 2L
+Which type of refrigerant oil is a fully synthetic oil primarily used with HFC refrigerants? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 22)
+Mineral Oil
+Alkylbenzene (AB) Oil
+Polyol Ester Oil (POE)
+PAG Oil (automotive systems)
+Which refrigerant blend type has only one boiling and/or condensing point for each system pressure? (week3,4-Refrigerants - Tagged.pdf, Page 20)
+Zeotropic Blend
+Azeotropic Blend
+Near-Azeotropic Blend
+Isentropic Blend
+Which refrigerant blend type has a noticeable temperature glide of 2-10°F? (week3,4-Refrigerants - Tagged.pdf, Page 22)
+Azeotropic Blend
+Near-Azeotropic Blend
+Zeotropic Blend
+Pure Compound
+What is the definition of Fractionation for a zeotropic refrigerant blend? (week3,4-Refrigerants - Tagged.pdf, Page 23)
+When the components boil and condense at a single temperature
+When the blend separates into layers by density during storage
+When the different components have different vapourization and condensation rates and temperatures as they phase change
+When the blend separates due to freezing
+When measuring pressure/temperature relationships for zeotropic blends, which temperature measurement should be used for the evaporator? (week3,4-Refrigerants - Tagged.pdf, Page 25)
+Bubble Point
+Dew Point
+Mid-point
+Average Point
+The primary reason for a deep system evacuation is to remove non-condensable gases and what other substance? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 32)
+Refrigerant oil
+Refrigerant liquid
+Moisture (water vapor)
+Contaminants from the compressor
+Non-condensable gases will cause a rise in the system's operating what? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 32)
+Superheat
+Subcooling
+Head pressure
+Suction pressure
+The EPA mandates that sealed systems should reach a minimum vacuum level of at least how many microns? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 33)
+100 microns
+500 microns
+1,000 microns
+2,000 microns
+What is cited as the best method to measure the vacuum level during system evacuation? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 33)
+Compound gauge reading
+Manifold gauge set reading
+Atmospheric pressure gauge
+Electronic (thermistor) vacuum gage
+What process is accomplished by first evacuating a system to a low vacuum (about 1,500 microns), then bleeding in dry nitrogen, and repeating the evacuation? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 38)
+Deep Vacuum
+Single Evacuation
+Multiple Evacuation
+Nitrogen Purging
+When charging a refrigeration system, which method is cited as very accurate because it automatically displays the amount of refrigerant removed from the cylinder? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 47)
+Using a sight glass
+Using a charging manifold
+Using charging charts
+Using an electronic scale
+Which leak detection method involves increasing the test pressure with an inert gas like nitrogen? (week3,4-Refrigerants.odpRRRR - Tagged.pdf, Page 26)
+Soap solution
+Electronic detector
+Standing Pressure test
+Fluorescent dyes
+What is the TDG class for Gases (compressed, deeply refrigerated, liquefied or dissolved under pressure)? (week5-pp_HRAC-111- Tagged.pdf, Page 46)
+Class 1
+Class 2
+Class 3
+Class 4
+What is the TDG class for Flammable Liquids? (week5-pp_HRAC-111- Tagged.pdf, Page 46)
+Class 2
+Class 3
+Class 4
+Class 5
+According to the TDG 500 kg Gross Mass Exemption, documentation, safety marks, and means of containment rules do not apply if the gross mass of all dangerous goods transported is less than or equal to 500 kg, provided they meet other criteria, but the TDG training requirements (Part 6) do not apply only if the dangerous goods are contained in no more than 5 small means of containment and what other gross mass limit is met? (week5-pp_HRAC-111- Tagged.pdf, Page 64 & 47)
+Less than or equal to 100 kg
+Less than or equal to 250 kg
+Less than or equal to 500 kg
+Less than or equal to 1,000 kg
+For transport by road vehicle, railway vehicle, or ship, a TDG training certificate expires how long after its date of issuance? (week5-pp_HRAC-111- Tagged.pdf, Page 52)
+12 months
+24 months
+36 months
+48 months
