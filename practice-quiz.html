@@ -15,8 +15,8 @@
         .back-link { position: absolute; top: 15px; left: 15px; font-weight: 600; color: #4f46e5; text-decoration: none; }
         #timerDisplay { position: absolute; top: 15px; right: 15px; font-weight: 600; color: #dc2626; font-size: 1.1em; }
 
-        .question-card { border: 1px solid #e5e7eb; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
-        .question-card p { font-weight: 700; font-size: 1.1em; margin-bottom: 12px; }
+        .question-card { position: relative; border: 1px solid #e5e7eb; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        .question-card p { font-weight: 700; font-size: 1.1em; margin-bottom: 12px; padding-right: 40px; }
         .options label { display: block; margin: 8px 0; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
         .options label:hover { background-color: #e0e7ff; }
         .options input[type="radio"] { opacity: 0; position: absolute; }
@@ -25,6 +25,11 @@
         .incorrect-feedback { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c; font-weight: 600;}
         .actual-answer { border: 2px solid #22c55e !important; }
         .disabled-options label { cursor: not-allowed; pointer-events: none; opacity: 0.7; }
+
+        .save-star { position: absolute; top: 10px; right: 10px; cursor: pointer; width: 30px; height: 30px; border: none; background: none; padding: 0; }
+        .save-star svg { width: 100%; height: 100%; stroke: #9ca3af; stroke-width: 1.5; fill: none; transition: all 0.2s; }
+        .save-star:hover svg { stroke: #facc15; }
+        .save-star.saved svg { fill: #facc15; stroke: #f59e0b; }
 
         #quizNavigation { display: flex; justify-content: space-between; margin-top: 20px; }
         #quizNavigation button { padding: 12px 20px; font-size: 1em; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; width: 48%; }
@@ -49,12 +54,10 @@
         <h1 id="quizTitle">Loading...</h1>
         <div id="loadingMessage">Verifying user and loading quiz data...</div>
         <div id="quizContainer" class="hidden"></div>
-
         <div id="quizNavigation" class="hidden">
             <button id="prevQuestionButton" onclick="changeQuestion(-1)">&#9664; Prev</button>
             <button id="nextQuestionButton" onclick="changeQuestion(1)">Next &#9654;</button>
         </div>
-
         <div id="resultsContainer" class="results hidden">
             <h2>Practice Results</h2>
             <p id="scoreText" class="score"></p>
@@ -66,6 +69,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, deleteDoc, serverTimestamp, collection, query, getDocs, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyB1yiiAMR3pPa6-Jzhjaq0k7CDPB3L_C44",
@@ -78,13 +82,15 @@
         };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        let quizData = [], userAnswers = [], currentQuestionIndex = 0;
-        let quizContainer, loadingMessage, resultsContainer, scoreText, detailedResults, timerDisplay;
-        let quizNavigation, prevQuestionButton, nextQuestionButton;
+        let quizData = [], userAnswers = [], currentQuestionIndex = 0, currentUser = null;
+        let quizContainer, loadingMessage, timerDisplay, quizNavigation, prevQuestionButton, nextQuestionButton, resultsContainer, scoreText, detailedResults;
+        let quizTitle = '';
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                currentUser = user;
                 setupQuiz();
             } else {
                 alert("You must be logged in to practice. Redirecting to login page.");
@@ -95,31 +101,77 @@
         function setupQuiz() {
             quizContainer = document.getElementById('quizContainer');
             loadingMessage = document.getElementById('loadingMessage');
-            resultsContainer = document.getElementById('resultsContainer');
-            scoreText = document.getElementById('scoreText');
-            detailedResults = document.getElementById('detailedResults');
             timerDisplay = document.getElementById('timerDisplay');
             quizNavigation = document.getElementById('quizNavigation');
             prevQuestionButton = document.getElementById('prevQuestionButton');
             nextQuestionButton = document.getElementById('nextQuestionButton');
+            resultsContainer = document.getElementById('resultsContainer');
+            scoreText = document.getElementById('scoreText');
+            detailedResults = document.getElementById('detailedResults');
 
             window.changeQuestion = changeQuestion;
+            window.toggleSaveQuestion = toggleSaveQuestion;
 
             const urlParams = new URLSearchParams(window.location.search);
-            const qfile = urlParams.get('qfile');
-            const afile = urlParams.get('afile');
-            const title = urlParams.get('title') || 'Practice Quiz';
-            const count = parseInt(urlParams.get('count')) || 10;
-            
-            if (!qfile || !afile) {
-                loadingMessage.textContent = 'Error: Quiz files not specified in URL.';
+            const mode = urlParams.get('mode');
+
+            if (mode === 'saved') {
+                quizTitle = urlParams.get('title') || 'Saved Questions Drill';
+                document.getElementById('quizTitle').textContent = quizTitle;
+                document.title = quizTitle;
+                loadSavedQuestions();
+            } else {
+                const qfile = urlParams.get('qfile');
+                const afile = urlParams.get('afile');
+                quizTitle = urlParams.get('title') || 'Practice Quiz';
+                const count = parseInt(urlParams.get('count')) || 10;
+                
+                if (!qfile || !afile) {
+                    loadingMessage.textContent = 'Error: Quiz files not specified in URL.';
+                    return;
+                }
+                
+                document.getElementById('quizTitle').textContent = quizTitle;
+                document.title = quizTitle;
+                
+                loadQuizData(qfile, afile, count);
+            }
+        }
+
+        async function loadSavedQuestions() {
+            if (!currentUser) {
+                loadingMessage.textContent = 'Could not verify user. Please try again.';
                 return;
             }
-            
-            document.getElementById('quizTitle').textContent = title;
-            document.title = title;
-            
-            loadQuizData(qfile, afile, count);
+
+            try {
+                const savedQuestionsRef = collection(db, "users", currentUser.uid, "savedQuestions");
+                const q = query(savedQuestionsRef, limit(20));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    loadingMessage.textContent = 'You have no saved questions yet. Star questions during practice to add them here!';
+                    quizNavigation.classList.add('hidden');
+                    return;
+                }
+
+                const fetchedQuestions = [];
+                querySnapshot.forEach((doc) => {
+                    fetchedQuestions.push(doc.data());
+                });
+
+                quizData = shuffleArray(fetchedQuestions);
+                userAnswers = quizData.map(() => ({ value: null }));
+
+                loadingMessage.classList.add('hidden');
+                [quizContainer, timerDisplay, quizNavigation].forEach(el => el.classList.remove('hidden'));
+                await renderQuiz(currentQuestionIndex);
+                startTimer();
+            } catch (error) {
+                console.error("Error loading saved questions: ", error);
+                loadingMessage.textContent = `Failed to load saved questions. Error: ${error.message}`;
+                loadingMessage.style.color = 'red';
+            }
         }
 
         async function loadQuizData(qfile, afile, count) {
@@ -128,49 +180,36 @@
                 if (!qRes.ok || !aRes.ok) throw new Error("File not found");
                 const qText = await qRes.text();
                 const aText = await aRes.text();
-                
                 let allQuestions = processTextData(qText, aText);
                 quizData = shuffleArray(allQuestions).slice(0, count);
                 userAnswers = quizData.map(() => ({ value: null }));
-
                 loadingMessage.classList.add('hidden');
                 [quizContainer, timerDisplay, quizNavigation].forEach(el => el.classList.remove('hidden'));
-                
-                renderQuiz(currentQuestionIndex);
+                await renderQuiz(currentQuestionIndex);
                 startTimer();
             } catch (error) {
-                loadingMessage.textContent = `Error loading quiz: ${error.message}. Check file paths.`;
+                loadingMessage.textContent = `Error loading quiz: ${error.message}.`;
                 loadingMessage.style.color = 'red';
             }
         }
 
-        function processTextData(questionText, answerText) {
-            // This function remains the same
-            const lines = questionText.replace(/\r/g, '').split('\n').map(line => line.trim()).filter(line => line.length > 0 && !line.startsWith('[source'));
-            const answers = answerText.replace(/\r/g, '').split('\n').map(line => line.trim().toUpperCase()).filter(line => line.length > 0 && !line.startsWith('[source'));
-            const optionMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 }; const data = []; let questionBuffer = [];
-            for(const line of lines) {
-                questionBuffer.push(line);
-                if (questionBuffer.length === 5) {
-                    const qIndex = data.length;
-                    if (answers[qIndex] && questionBuffer[1 + optionMap[answers[qIndex]]]) {
-                        data.push({ question: questionBuffer[0], options: questionBuffer.slice(1), answer: questionBuffer[1 + optionMap[answers[qIndex]]] });
-                    }
-                    questionBuffer = [];
-                }
-            }
-            return data;
-        }
-
-        function renderQuiz(index) {
+        async function renderQuiz(index) {
             const item = quizData[index];
             quizContainer.innerHTML = '';
             const card = document.createElement('div');
             card.className = 'question-card';
-            card.innerHTML = `<p>Q${index + 1}/${quizData.length}: ${item.question}</p>`;
+            
+            const starButtonHTML = `
+                <button class="save-star" id="save-star-${index}" onclick="toggleSaveQuestion(${index})">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+                    </svg>
+                </button>
+            `;
+
+            card.innerHTML = `<p>${item.question}</p>${starButtonHTML}`;
             const optionsDiv = document.createElement('div');
             optionsDiv.className = 'options';
-
             item.options.forEach(option => {
                 const label = document.createElement('label');
                 const radio = document.createElement('input');
@@ -178,28 +217,94 @@
                 radio.name = 'currentQuestion';
                 radio.value = option;
                 radio.onchange = handleAnswerClick;
-                
                 const optionSpan = document.createElement('span');
                 optionSpan.textContent = option;
                 label.appendChild(radio);
                 label.appendChild(optionSpan);
                 optionsDiv.appendChild(label);
             });
-
             card.appendChild(optionsDiv);
             quizContainer.appendChild(card);
+            
+            await updateStarAppearance(index);
             updateNavigationButtons();
         }
-        
+
+        // **ALL FUNCTIONS BELOW THIS LINE ARE UNCHANGED**
+
+        function processTextData(questionText, answerText) {
+            const lines = questionText.replace(/\r/g, '').split('\n').map(line => line.trim()).filter(line => line.length > 0 && !line.startsWith('[source'));
+            const answers = answerText.replace(/\r/g, '').split('\n').map(line => line.trim().toUpperCase()).filter(line => line.length > 0 && !line.startsWith('[source'));
+            const optionMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+            const data = [];
+            let questionBuffer = [];
+            for (const line of lines) {
+                questionBuffer.push(line);
+                if (questionBuffer.length === 5) {
+                    const qIndex = data.length;
+                    if (answers[qIndex] && questionBuffer[1 + optionMap[answers[qIndex]]]) {
+                        data.push({
+                            question: questionBuffer[0],
+                            options: questionBuffer.slice(1),
+                            answer: questionBuffer[1 + optionMap[answers[qIndex]]]
+                        });
+                    }
+                    questionBuffer = [];
+                }
+            }
+            return data;
+        }
+
+        async function toggleSaveQuestion(index) {
+            if (!currentUser) return;
+            const questionData = quizData[index];
+            const questionHash = simpleHash(questionData.question);
+            const starButton = document.getElementById(`save-star-${index}`);
+            const questionDocRef = doc(db, "users", currentUser.uid, "savedQuestions", questionHash);
+            if (starButton.classList.contains('saved')) {
+                await deleteDoc(questionDocRef);
+                starButton.classList.remove('saved');
+            } else {
+                await setDoc(questionDocRef, {
+                    question: questionData.question,
+                    options: questionData.options,
+                    answer: questionData.answer,
+                    sourceTitle: quizTitle,
+                    savedAt: serverTimestamp()
+                });
+                starButton.classList.add('saved');
+            }
+        }
+
+        async function updateStarAppearance(index) {
+            if (!currentUser) return;
+            const questionHash = simpleHash(quizData[index].question);
+            const questionDocRef = doc(db, "users", currentUser.uid, "savedQuestions", questionHash);
+            const docSnap = await getDoc(questionDocRef);
+            const starButton = document.getElementById(`save-star-${index}`);
+            if (docSnap.exists()) {
+                starButton.classList.add('saved');
+            } else {
+                starButton.classList.remove('saved');
+            }
+        }
+
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = (hash << 5) - hash + char;
+                hash &= hash;
+            }
+            return Math.abs(hash).toString(36);
+        }
+
         function handleAnswerClick(event) {
             const selectedLabel = event.target.closest('label');
             const selectedValue = event.target.value;
             const correctAnswer = quizData[currentQuestionIndex].answer;
-            
             userAnswers[currentQuestionIndex].value = selectedValue;
-
             quizContainer.querySelector('.options').classList.add('disabled-options');
-            
             if (selectedValue === correctAnswer) {
                 selectedLabel.classList.add('correct-feedback');
             } else {
@@ -214,11 +319,11 @@
             updateNavigationButtons();
         }
 
-        function changeQuestion(direction) {
+        async function changeQuestion(direction) {
             const newIndex = currentQuestionIndex + direction;
             if (newIndex >= 0 && newIndex < quizData.length) {
                 currentQuestionIndex = newIndex;
-                renderQuiz(currentQuestionIndex);
+                await renderQuiz(currentQuestionIndex);
             } else if (newIndex === quizData.length) {
                 showResults();
             }
@@ -234,7 +339,7 @@
                 nextQuestionButton.disabled = userAnswers[currentQuestionIndex].value === null;
             }
         }
-        
+
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -250,11 +355,14 @@
             const s = Math.floor((Date.now() - startTime) / 1000);
             timerDisplay.textContent = `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
         }
-        
+
         function showResults() {
-             stopTimer();
-             const finalScore = calculateAndSaveScore();
-             detailedResults.innerHTML = quizData.map((item, index) => {
+            stopTimer();
+            const finalScore = calculateAndSaveScore();
+            const resultsContainer = document.getElementById('resultsContainer');
+            const scoreText = document.getElementById('scoreText');
+            const detailedResults = document.getElementById('detailedResults');
+            detailedResults.innerHTML = quizData.map((item, index) => {
                 const userAnswer = userAnswers[index].value;
                 const isCorrect = userAnswer === item.answer;
                 if (isCorrect) {
@@ -262,11 +370,11 @@
                 }
                 return `<div class="result-item incorrect"><b>Q${index + 1}: Incorrect.</b> (${item.question})<br>Your Answer: ${userAnswer || "None"}<br><span class="correct-answer">Correct: ${item.answer}</span></div>`;
             }).join('');
-             scoreText.textContent = `You got ${finalScore} out of ${quizData.length} correct!`;
-             [quizContainer, quizNavigation].forEach(el => el.classList.add('hidden'));
-             resultsContainer.classList.remove('hidden');
+            scoreText.textContent = `You got ${finalScore} out of ${quizData.length} correct!`;
+            [quizContainer, quizNavigation].forEach(el => el.classList.add('hidden'));
+            resultsContainer.classList.remove('hidden');
         }
-        
+
         function calculateAndSaveScore() {
             return userAnswers.reduce((acc, ans, i) => acc + (ans.value === quizData[i].answer ? 1 : 0), 0);
         }
