@@ -100,7 +100,6 @@
             hideQuizOptions();
             let params;
 
-            // CORRECTED: Removed leading slashes from all file paths
             if (currentQuizId === 'class111_quiz1') {
                  params = new URLSearchParams({ qfile: 'questionbank/hrac111quiz1.txt', afile: 'questionbank/hrac111quiz1answer.txt', title: `HRAC 111 - Quiz 1 Practice`, count: count });
             } else if (currentQuizId === 'class111_test1') {
@@ -139,7 +138,6 @@
             hideQuizOptions();
             let params;
             
-            // CORRECTED: Removed leading slashes from all file paths
             if (currentQuizId === 'class111_quiz1') {
                 params = new URLSearchParams({ qfile: 'questionbank/hrac111quiz1.txt', afile: 'questionbank/hrac111quiz1answer.txt', title: 'HRAC 111 - Quiz 1 Test' });
             } else if (currentQuizId === 'class111_test1') {
