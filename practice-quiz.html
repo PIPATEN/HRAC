@@ -69,7 +69,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, deleteDoc, serverTimestamp, collection, query, getDocs, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, deleteDoc, serverTimestamp, collection, query, getDocs, limit, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyB1yiiAMR3pPa6-Jzhjaq0k7CDPB3L_C44",
@@ -87,6 +87,7 @@
         let quizData = [], userAnswers = [], currentQuestionIndex = 0, currentUser = null;
         let quizContainer, loadingMessage, timerDisplay, quizNavigation, prevQuestionButton, nextQuestionButton, resultsContainer, scoreText, detailedResults;
         let quizTitle = '';
+        let questionBankTotal = 0;
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -181,6 +182,9 @@
                 const qText = await qRes.text();
                 const aText = await aRes.text();
                 let allQuestions = processTextData(qText, aText);
+
+                questionBankTotal = allQuestions.length; // 🟢 NEW LINE: Store the total count
+
                 quizData = shuffleArray(allQuestions).slice(0, count);
                 userAnswers = quizData.map(() => ({ value: null }));
                 loadingMessage.classList.add('hidden');
@@ -305,7 +309,10 @@
             const correctAnswer = quizData[currentQuestionIndex].answer;
             userAnswers[currentQuestionIndex].value = selectedValue;
             quizContainer.querySelector('.options').classList.add('disabled-options');
-            if (selectedValue === correctAnswer) {
+            
+            const isCorrect = (selectedValue === correctAnswer); // Determine if the answer is correct
+            
+            if (isCorrect) {
                 selectedLabel.classList.add('correct-feedback');
             } else {
                 selectedLabel.classList.add('incorrect-feedback');
@@ -316,6 +323,13 @@
                     }
                 });
             }
+            
+            // NEW: Call the function to update the performance metrics in the database
+            updatePerformanceMetrics(currentQuestionIndex, isCorrect);
+
+            // NEW LOGIC: Calculates the running score and saves the set performance live
+            saveSetPerformance();
+            
             updateNavigationButtons();
         }
 
@@ -356,9 +370,14 @@
             timerDisplay.textContent = `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
         }
 
+
         function showResults() {
             stopTimer();
             const finalScore = calculateAndSaveScore();
+
+            // Call the function to save the final result to Firestore (queries for max score)
+            saveSetPerformance();
+
             const resultsContainer = document.getElementById('resultsContainer');
             const scoreText = document.getElementById('scoreText');
             const detailedResults = document.getElementById('detailedResults');
@@ -378,6 +397,92 @@
         function calculateAndSaveScore() {
             return userAnswers.reduce((acc, ans, i) => acc + (ans.value === quizData[i].answer ? 1 : 0), 0);
         }
+
+        // UPDATED: Function to include the 'latestAttempts' field
+        async function updatePerformanceMetrics(questionIndex, isCorrect) {
+            if (!currentUser) return;
+            const questionData = quizData[questionIndex];
+            const questionHash = simpleHash(questionData.question);
+            const questionDocRef = doc(db, "users", currentUser.uid, "performanceMetrics", questionHash);
+
+            // Get current metrics or initialize to 0
+            const docSnap = await getDoc(questionDocRef);
+            let currentCorrect = 0;
+            let currentIncorrect = 0;
+
+            if (docSnap.exists()) {
+                currentCorrect = docSnap.data().correctAttempts || 0;
+                currentIncorrect = docSnap.data().incorrectAttempts || 0;
+            }
+
+            // Increment the relevant counter
+            if (isCorrect) {
+                currentCorrect += 1;
+            } else {
+                currentIncorrect += 1;
+            }
+
+            // Determine the value for the new field ("true" or "false" as strings)
+            const latestAttemptStatus = isCorrect ? "true" : "false";
+
+            // Save the updated metrics, including the new 'latestAttempts' field
+            await setDoc(questionDocRef, {
+                question: questionData.question,
+                sourceTitle: quizTitle,
+                correctAttempts: currentCorrect,
+                incorrectAttempts: currentIncorrect,
+                lastAttemptAt: serverTimestamp(),
+                // NEW FIELD: Stores the result of the most recent attempt
+                latestAttempts: latestAttemptStatus,
+            }, { merge: true }); // Use merge: true to update existing fields without overwriting the whole document
+        }
+
+        // NEW: Function to save overall performance for the question set
+        // practice-quiz.html
+
+// ... (Find and replace the existing saveSetPerformance function)
+
+// UPDATED: Function to save overall performance by querying the correct attempts.
+        async function saveSetPerformance() {
+            if (!currentUser || !quizTitle) return;
+
+            // 1. Define the target question set performance document reference
+            const setHash = simpleHash(quizTitle + currentUser.uid);
+            const performanceSetDocRef = doc(db, "users", currentUser.uid, "questionSetPerformance", setHash);
+
+            // 2. Query the individual performanceMetrics for this user/set
+            const performanceMetricsRef = collection(db, "users", currentUser.uid, "performanceMetrics");
+
+            // Query for questions belonging to the current set that have been answered correctly
+            const q = query(
+                performanceMetricsRef,
+                where("sourceTitle", "==", quizTitle),
+                where("latestAttempts", "==", "true")
+            );
+
+            try {
+                const querySnapshot = await getDocs(q);
+                const numberTrueQuestion = querySnapshot.size; // This is the count you requested
+
+                // 3. Save the updated data to the questionSetPerformance document
+                await setDoc(performanceSetDocRef, {
+                    questionSet: quizTitle,
+                    
+                    // REQUIRED NEW FIELD NAME
+                    numberTrueQuestion: numberTrueQuestion, 
+                    
+                    totalQuestionsInSlice: questionBankTotal,
+                    percentage: (numberTrueQuestion / questionBankTotal) * 100,
+                    lastAttemptAt: serverTimestamp()
+                }, { merge: true });
+
+                console.log("Question set performance (numberTrueQuestion) updated successfully.");
+
+            } catch (error) {
+                console.error("Error saving set performance: ", error);
+            }
+        }
+
     </script>
 </body>
 </html>

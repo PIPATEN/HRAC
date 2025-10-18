@@ -17,6 +17,10 @@
         </div>
 
         <div id="main-app" class="space-y-10 hidden">
+            <button onclick="showPerformanceSummary()" class="w-full px-4 py-2 text-sm bg-indigo-500 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-600 transition-colors duration-200">
+                Performance Summary
+            </button>
+
             <div id="page-content-container"></div>
             
             <div class="bg-gray-50 p-4 rounded-lg shadow-md border border-gray-200 mt-8 text-sm">
@@ -50,10 +54,20 @@
         </div>
     </div>
 
+    <div id="performance-modal" class="modal-backdrop hidden">
+        <div class="modal-content space-y-4">
+            <h2 class="text-2xl font-bold text-gray-800 border-b pb-2">Your Performance</h2>
+            <div id="performance-list" class="space-y-3 max-h-96 overflow-y-auto">
+                <p class="text-gray-500">Loading performance data...</p>
+            </div>
+            <button onclick="hidePerformanceSummary()" class="mt-4 text-gray-500 hover:text-gray-700 w-full py-2 border rounded">Close</button>
+        </div>
+    </div>
+
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    
+    import { getFirestore, collection, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     const firebaseConfig = {
         apiKey: "AIzaSyB1yiiAMR3pPa6-Jzhjaq0k7CDPB3L_C44",
         authDomain: "hrac-game.firebaseapp.com",
@@ -71,11 +85,16 @@
     const pageContentContainer = document.getElementById('page-content-container');
     const quizModal = document.getElementById('quiz-modal');
     const modalTitle = document.getElementById('modal-title');
+
+    // 🟢 NEW: Get reference to the performance modal elements
+    const performanceModal = document.getElementById('performance-modal');
+    const performanceList = document.getElementById('performance-list');
     
     // --- Firebase Initialization ---
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    
+    const db = getFirestore(app); // 🟢 NEW: Initialize Firestore DB
+
     // --- State Variables ---
     let currentQuizId = null; 
     let currentPage = '';
@@ -250,6 +269,51 @@
             history.replaceState(null, '', window.location.pathname);
         }
     });
+
+    // index.html (inside <script type="module">)
+
+    window.hidePerformanceSummary = () => performanceModal.classList.add('hidden');
+
+    window.showPerformanceSummary = async function() {
+        if (!auth.currentUser) return;
+
+        performanceModal.classList.remove('hidden');
+        performanceList.innerHTML = '<p class="text-center text-indigo-600">Loading performance data...</p>';
+
+        try {
+            const userId = auth.currentUser.uid;
+            const performanceRef = collection(db, "users", userId, "questionSetPerformance");
+            
+            // Fetch ALL documents in the user's questionSetPerformance subcollection
+            const q = query(performanceRef);
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                performanceList.innerHTML = '<p class="text-center text-gray-500">No practice attempts recorded yet!</p>';
+                return;
+            }
+
+            let html = '';
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const set = data.questionSet || 'Unknown Set'; // Gets the question set name
+                const percent = data.percentage !== undefined ? data.percentage.toFixed(1) : 'N/A'; // Gets the percentage
+
+                html += `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <span class="font-medium text-gray-700">${set}</span>
+                        <span class="text-lg font-bold ${percent >= 70 ? 'text-green-600' : 'text-red-600'}">${percent}%</span>
+                    </div>
+                `;
+            });
+            
+            performanceList.innerHTML = html;
+
+        } catch (error) {
+            console.error("Error fetching performance summary:", error);
+            performanceList.innerHTML = '<p class="text-center text-red-500">Failed to load data. Please check console.</p>';
+        }
+    };
 </script>
 </body>
 </html>
