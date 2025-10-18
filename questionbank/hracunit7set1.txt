@@ -1,0 +1,190 @@
+The piping system in a refrigeration or air-conditioning unit serves which dual purpose?
+Providing insulation and restricting refrigerant flow.
+Providing the path for refrigerant flow and allowing oil to drain back to the compressor.
+Absorbing excess heat and preventing system pressure buildup.
+Removing burrs and preventing condensation.
+What two contaminants must be prevented from entering air-conditioning and refrigeration systems?
+Grease and oil.
+Flux and acid.
+Moisture and dirt.
+Nitrogen and carbon dioxide.
+ACR (air-conditioning and refrigeration) tubing is sized by which dimension?
+Wall Thickness (WT).
+Inside Diameter (ID).
+Outside Diameter (OD).
+Nominal Size.
+What is the process of heating work-hardened tubing to a cherry red color and allowing it to cool slowly to soften it?
+Brazing.
+Tempering.
+Annealing.
+Swaging.
+Why is ACR tubing often insulated on the low-pressure side of an air-conditioning or refrigeration system?
+To prevent the refrigerant from freezing.
+To maintain the structural integrity of the tubing.
+To keep the refrigerant from absorbing excess heat and prevent condensation.
+To comply with federal regulations for pipe material.
+When installing insulation on tubing that is already in place, what method is explicitly advised not to be used to hold the insulation together?
+Adhesive intended for the purpose.
+Slitting the insulation along the markings.
+Tape, plastic wire/cable ties, or other methods.
+Rotating the insulation to conceal the seam.
+What is the primary advantage of using a precharged line set with quick-connect fittings?
+They eliminate the need for any brazing or soldering.
+The system does not have to be evacuated prior to operation.
+They allow for the use of R-22 refrigerant legally.
+They eliminate the need for any insulation.
+As of January 1, 2010, the manufacture or import of precharged line sets containing which refrigerants became illegal?
+R-134a or R-410A.
+R-407C or R-507.
+R-22 or R-142b.
+Propane or Butane.
+What is the excess material pushed into the pipe by a tube cutter wheel called, and why must it be removed?
+Scrap; it is a sign of poor technique.
+Ream; it can cut your skin.
+Burrs; they can restrict the fluid or vapor passing through the pipe.
+Kink; it causes work hardening.
+What is the maximum recommended rotation for the adjusting screw per rotation around the tubing when using a tube cutter to make a cut?
+Approximately 1/4 of a turn.
+Approximately 1/8 of a turn.
+Approximately 1/2 of a turn.
+The screw should not be adjusted once the cut begins.
+The text suggests minimizing the number of solder joints and mechanical fittings primarily because:
+They are the most expensive components of the piping system.
+Each joint or connection represents a potential leak.
+They are time-consuming to install properly.
+They cause the refrigerant to absorb excess heat.
+If an outside diameter (OD) tube bending spring is used, when must it be removed?
+After soldering the joint.
+Before annealing the tubing.
+Before flaring the tubing.
+After attaching the flare nut.
+Which of the following is defined as a joining process where the filler material melts below 800°F?
+Welding.
+Annealing.
+Brazing.
+Soldering.
+What is the main difference between brazing and welding as described in the text?
+Welding involves filler material melting below 800°F.
+Brazing involves filler material melting below 840°F, while welding involves melting the base metal.
+Brazing is used only on copper, while welding is used on steel.
+Brazing requires a neutral flame, while welding requires a carburizing flame.
+Which common heat source produces the hottest flames, often as high as 5600°F?
+Propane torch.
+MAPP™ gas torch.
+Air-acetylene unit.
+Oxyacetylene torch.
+Which of the following torch types produces flame temperatures in the range of 3600°F?
+Air-acetylene.
+Propane.
+Butane.
+Oxyacetylene.
+What is the main purpose of flux when soldering?
+To increase the melting point of the filler material.
+To prevent the tubing from work hardening.
+To absorb excess heat from the torch flame.
+To clean the surfaces of the metal being joined and prevent oxidation.
+What is the ideal type of flame used on an air-acetylene torch for soldering, and what characteristic does it have?
+A neutral flame; it has a well-defined inner cone and no excess gas.
+An oxidizing flame; it is hotter and cleans the copper surface.
+A carburizing flame; it has a well-defined inner cone and provides excess acetylene.
+A reducing flame; it only contains oxygen and heat.
+What is the primary purpose of introducing nitrogen into the system while brazing?
+To increase the pressure inside the tubing to test for leaks.
+To cool the joint quickly after brazing is complete.
+To purge the air (containing oxygen) and reduce the possibility of oxidation.
+To act as a lubricant for the brazing rod.
+What is the recommended pressure for the nitrogen used to purge the piping during brazing?
+10 to 20 psig.
+50 to 60 psig.
+1 to 2 psig.
+100 to 125 psig.
+A technician should never look at the flame of the torch without wearing what type of eye protection?
+Clear safety goggles.
+Sunglasses.
+Filtered glasses.
+A full-face shield.
+When soldering or brazing near any combustible material, what minimum distance should you be from it?
+1 foot.
+6 inches.
+5 feet.
+10 feet.
+What is the key advantage of MAPP™ gas compared to propane for heating?
+MAPP™ gas is non-flammable.
+MAPP™ gas has a much higher flame temperature (up to 3730°F).
+MAPP™ gas is a pure element and not a mixture.
+MAPP™ gas does not require a special torch tip.
+What is the recommended procedure for closing an acetylene cylinder valve in the event of an emergency?
+Remove the wrench and close the valve slowly.
+Leave the wrench on the valve stem for a quick closure.
+Close the torch handle valve first, then the cylinder valve.
+Spray the valve with a soap bubble solution to cool it.
+Before placing the tubing in the flaring block, what must be placed on the tubing first?
+A tube bending spring.
+The flare nut.
+A compression ferrule.
+The swaging punch.
+To ensure a proper flare, how far must the tubing extend above the flaring block?
+A distance equal to the thickness of the tubing wall.
+The distance equal to the outside diameter of the tubing.
+A distance slightly less than the thickness of a dime.
+A distance approximately 1/8 inch greater than the outside diameter.
+What is the primary purpose of a swaged joint?
+To create a mechanical, thread-based connection.
+To expand one end of a tube so a section of the same size tube can be inserted, thus eliminating a coupling.
+To allow soft-drawn tubing to be connected to hard-drawn tubing.
+To reduce the outer diameter of the tubing for insertion into a fitting.
+When using the swaging punch method, how far should the tubing stick out from the flaring block?
+Approximately 1/4 inch more than the tubing diameter.
+Approximately the diameter of the tube plus 1/8 inch.
+Approximately the distance of a dime.
+Approximately 1/16 inch less than the flare nut thickness.
+What type of fitting is often used to connect small tubing in situations where flaring or swaging cannot be performed?
+Union fitting.
+Soldered fitting.
+Compression fitting.
+Welded fitting.
+What component of a compression fitting is compressed around the tubing as the compression nut is tightened?
+The swaging punch.
+The flaring block.
+The ferrule.
+The tube cutter wheel.
+What material is generally used to make steel pipe for HVACR applications?
+Galvanized steel.
+Black iron.
+Stainless steel.
+Copper-nickel alloy.
+Steel pipe is measured and designated by its:
+Outside Diameter (OD).
+Weight per foot.
+Inside Diameter (ID).
+Taper angle.
+In the HVACR industry, which type of American National Standard pipe thread is exclusively used because it produces a tight joint that helps prevent leakage?
+Straight pipe.
+Unified pipe.
+Tapered pipe.
+Metric pipe.
+What is the standard V-shape angle for American National Standard pipe threads?
+$45^{\circ}$
+$60^{\circ}$
+$75^{\circ}$
+$90^{\circ}$
+What material is generally used to join PVC and CPVC pipe sections?
+A special sealant and tape.
+A heat fusion device.
+An adhesive (cement) and often a primer.
+A ferrule and flare nut.
+What is the purpose of using purple primer in some PVC piping installations?
+To prevent the plastic from cracking in cold weather.
+To act as a lubricant so the pipe slides easily into the fitting.
+To provide a color indication that an inspector can quickly use to verify the pipe was primed.
+To strengthen the connection by increasing the wall thickness.
+What is a key characteristic shared by alternative mechanical piping connections described in the text?
+They are designed to eliminate the need for threading steel pipe.
+They require special fittings and/or equipment that are often more expensive than traditional connections.
+They all use a push-to-connect method with internal tabs.
+They are only intended for copper tubing and cannot be used with other materials.
+One type of alternative mechanical connection eliminates the need for soldering by using a fitting that receives pipe sections that are simply pushed into it. What provides the seal in this type of fitting?
+The internal threading on the fitting.
+Tabs located around the interior circumference along with gasket material.
+A compression nut tightened by a specialized tool.
+An adhesive applied to the outside of the pipe before insertion.
