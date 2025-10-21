@@ -198,14 +198,14 @@
             appId: "1:916266107755:web:8697df896deb8479e6422e",
             measurementId: "G-DRFYPLC7GX"
         };
-        // 💥 FIX APPLIED: Initializing the default Firebase app instance 💥
+        // FIX 1: Use the default app instance to pick up the existing Google session
         const app = firebase.initializeApp(firebaseConfig); 
         const db = firebase.firestore(app);
         const auth = firebase.auth(app); 
 
 
         // --- Game State Variables ---
-        let questions = [];        // Array of questions loaded from URL
+        let questions = [];        // Array of questions loaded from Storage
         let currentQuestionIndex = 0;
         let score = 0;
         let isAuthenticated = false; // Flag to track authentication status
@@ -231,28 +231,24 @@
 
         // --- Core Functions ---
         
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            const results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
+        // Removed: getUrlParameter function (no longer needed)
 
-        // 💥 MODIFIED: No longer async and doesn't call signInAnonymously 💥
+        // FIX 2: Load questions from sessionStorage instead of the URL parameter
         function loadQuestions() {
             loadingState.style.display = 'block';
             
-            // 1. Retrieve the encoded question data
-            const encodedQData = getUrlParameter('qData');
+            // 1. Retrieve the question data from session storage
+            const questionPackageJson = sessionStorage.getItem('gameQuestionData');
+            // Clear the storage immediately after reading it to prevent stale data
+            sessionStorage.removeItem('gameQuestionData'); 
             
-            // Log the received encoded data to the console
-            console.log("--- RECEIVED ENCODED QUESTION PACKAGE ---");
-            console.log("Encoded Data (qData):", encodedQData);
+            console.log("--- RECEIVED QUESTION PACKAGE (from sessionStorage) ---");
+            console.log("JSON Data:", questionPackageJson ? questionPackageJson.substring(0, 100) + '...' : 'null');
             console.log("-----------------------------------------");
             
-            if (!encodedQData) {
+            if (!questionPackageJson) {
                 setTitle.textContent = 'Error Loading Quiz';
-                loadingState.innerHTML = '<p style="color: red;">Question data not found in URL. Returning to Question Bank...</p>';
+                loadingState.innerHTML = '<p style="color: red;">Question data not found. Please select a set from the Question Bank.</p>';
                 // Fallback action
                 setTimeout(() => window.location.href = 'question-bank.html', 3000);
                 return;
@@ -260,7 +256,7 @@
 
             try {
                 // 2. Decode and parse the JSON string
-                questions = JSON.parse(encodedQData);
+                questions = JSON.parse(questionPackageJson);
                 
                 // Log the parsed question package to the console
                 console.log("--- PARSED QUESTION PACKAGE ---");
@@ -491,7 +487,7 @@
         resultsBackBtn.addEventListener('click', goBackToBank);
 
 
-        // 💥 NEW: Use onAuthStateChanged to load content only after session is confirmed 💥
+        // Use onAuthStateChanged to load content only after session is confirmed
         auth.onAuthStateChanged(user => {
             if (user) {
                 isAuthenticated = true;

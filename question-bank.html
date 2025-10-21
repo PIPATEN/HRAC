@@ -451,12 +451,21 @@
             }
 
             // 3. Package and Redirect
-            const questionPackageJson = JSON.stringify(selectedQuestions);
+            //const questionPackageJson = JSON.stringify(selectedQuestions);
             
-            console.log(`✅ ${selectedQuestions.length} Drill Questions Selected. Redirecting to question_game.html...`);
+            //console.log(`✅ ${selectedQuestions.length} Drill Questions Selected. Redirecting to question_game.html...`);
             
             // Redirect with the entire, encoded question data package
-            window.location.href = `question_game.html?qData=${encodeURIComponent(questionPackageJson)}`;
+            //window.location.href = `question_game.html?qData=${encodeURIComponent(questionPackageJson)}`;
+            // 3. Package and Redirect - NEW (Store in sessionStorage)
+            const questionPackageJson = JSON.stringify(selectedQuestions);
+            // Store the data in session storage before redirecting
+            sessionStorage.setItem('gameQuestionData', questionPackageJson); 
+    
+            console.log(`✅ ${selectedQuestions.length} Drill Questions Selected. Stored in sessionStorage. Redirecting to question_game.html...`);
+    
+            // Redirect without the large URL parameter
+            window.location.href = `question_game.html`;
 
         } catch (error) {
             console.error("🔥 FATAL FIREBASE/PACKAGING ERROR:", error);
@@ -522,13 +531,24 @@
 
 
             // 3. Package and Redirect
-            const questionPackageJson = JSON.stringify(selectedQuestions);
+            //const questionPackageJson = JSON.stringify(selectedQuestions);
             
             // Log for inspection (optional, but good for debugging)
-            console.log(`✅ ${selectedQuestions.length} Questions Selected. Redirecting to question_game.html...`);
+            //console.log(`✅ ${selectedQuestions.length} Questions Selected. Redirecting to question_game.html...`);
             
             // Redirect with the entire, encoded question data package
-            window.location.href = `question_game.html?qData=${encodeURIComponent(questionPackageJson)}`;
+            //window.location.href = `question_game.html?qData=${encodeURIComponent(questionPackageJson)}`;
+
+            // 3. Package and Redirect - NEW (Store in sessionStorage)
+            const questionPackageJson = JSON.stringify(selectedQuestions);
+    
+            // Store the data in session storage before redirecting
+            sessionStorage.setItem('gameQuestionData', questionPackageJson); 
+    
+            console.log(`✅ ${selectedQuestions.length} Questions Selected. Stored in sessionStorage. Redirecting to question_game.html...`);
+    
+             // Redirect without the large URL parameter
+            window.location.href = `question_game.html`;
             
         } catch (error) {
             console.error("🔥 FATAL FIREBASE/PACKAGING ERROR:", error);
