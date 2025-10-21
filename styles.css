@@ -1,0 +1,80 @@
+/* Import a modern, clean font from Google Fonts (Roboto) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+    --primary-color: #4285F4; /* Google Blue */
+    --background-light: #f7f9fc;
+    --card-background: #ffffff;
+    --text-color: #3c4043;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--background-light); /* Light blue/grey background */
+    color: var(--text-color);
+}
+
+/* Modern Login Card Container */
+.login-container {
+    background: var(--card-background);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px var(--shadow-color), 0 5px 10px var(--shadow-color); /* Subtle, layered shadow */
+    width: 100%;
+    max-width: 380px; /* Limits the width for a clean look */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 500; /* Medium weight for modern title */
+    color: var(--text-color);
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+/* Styling for the Google Sign-In Button */
+#google-login-btn {
+    /* Button specific styles */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: var(--card-background); /* White background */
+    color: var(--text-color);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    /* Optional: Add a small Google icon */
+    background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48"><g><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.14 2.19 12.03l7.21 5.66C11.13 11.52 17.27 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.7 24.5c0-.98-.09-1.88-.24-2.73H24v5.18h12.44c-.53 2.53-2.07 4.88-4.52 6.54l6.84 5.67c4.27-3.97 6.76-9.74 6.76-16.66z"></path><path fill="#FBBC05" d="M9.2 30.5c-.87-2.3-1.4-4.79-1.4-7.5s.53-5.2 1.4-7.5l-7.2-5.66C2.15 17.51 0 20.89 0 24.5s2.15 6.99 6.2 10.66l7.21-5.66z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.77l-6.85-5.65C29.67 41.1 26.9 42.5 24 42.5c-6.73 0-12.88-4.07-15.0-9.53l-7.21 5.66C6.51 42.86 14.62 48 24 48z"></path><path fill="none" d="M0 0h48v48H0z"></path></g></svg>');
+    background-repeat: no-repeat;
+    background-position: 12px center;
+    padding-left: 45px; /* Adjust padding to make space for the icon */
+}
+
+#google-login-btn:hover {
+    background-color: var(--background-light); /* Slight change on hover */
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+#error-message {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #e74c3c; /* A strong red for errors */
+    font-weight: 500;
+}

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Game</title>
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <style>
+        /* Define colors (Pulled from previous files for consistency) */
+        :root {
+            --primary-color: #4285F4; /* Google Blue */
+            --background-light: #f7f9fc;
+            --card-background: #ffffff;
+            --text-color: #3c4043;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --secondary-color: #27ae60; /* Success Green */
+            --error-color: #e74c3c; /* Error Red */
+            --star-color: gold; /* New color for the star */
+        }
+        
+        .game-container {
+            max-width: 800px;
+            width: 90%;
+            margin: 40px auto;
+            padding: 30px;
+            background: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+        
+        #question-area {
+            min-height: 100px;
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            position: relative; /* Added for star positioning */
+        }
+
+        #question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-right: 35px; /* Ensure space for the star */
+            display: inline-block; /* Allows vertical alignment with star */
+            width: calc(100% - 35px);
+        }
+
+        /* --- NEW STAR STYLES --- */
+        #drill-star {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #ccc; /* Default grey (unticked) */
+            transition: color 0.2s;
+        }
+
+        #drill-star.active {
+            color: var(--star-color); /* Gold (ticked) */
+        }
+        /* --- END STAR STYLES --- */
+
+
+        .option-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            background-color: white;
+            color: var(--primary-color);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .option-button:hover:not(:disabled) {
+            background-color: var(--background-light);
+        }
+        
+        /* Answer Feedback States */
+        .option-button.correct {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white;
+            font-weight: 700;
+        }
+        
+        .option-button.incorrect {
+            background-color: var(--error-color);
+            border-color: var(--error-color);
+            color: white;
+        }
+        
+        .option-button:disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        #next-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 500;
+            display: none; /* Hidden until an answer is selected */
+            width: 100%;
+        }
+        
+        #progress-bar {
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        #progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+        
+        /* Results View */
+        #results-view {
+            text-align: center;
+        }
+        #results-view h2 {
+            color: var(--secondary-color);
+            font-size: 2rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container"> 
+        
+        <h1 id="set-title">Quiz Game</h1>
+        
+        <div id="loading-state">
+            <p style="text-align: center;">Loading Question Data...</p>
+        </div>
+
+        <div id="quiz-view" style="display: none;">
+            
+            <p id="current-score">Score: 0 / 0</p>
+            <div id="progress-bar"><div id="progress-bar-fill"></div></div>
+
+            <div id="question-area">
+                <p id="question-text">Question content will appear here.</p>
+                <span id="drill-star" data-drill="false">★</span>
+                <div id="options-container">
+                    </div>
+            </div>
+            
+            <button id="next-btn">Next Question</button>
+            <button id="back-to-bank-btn" class="action-btn" style="background-color: #555;">
+                ← Back to Question Bank
+            </button>
+        </div>
+        
+        <div id="results-view" style="display: none;">
+            <h2 id="final-result-text"></h2>
+            <p id="final-score-text"></p>
+            <button id="restart-btn" class="action-btn">Play Again</button>
+            <button id="results-back-btn" class="action-btn" style="background-color: #555; margin-top: 10px;">
+                ← Back to Question Bank
+            </button>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration and Initialization
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTySJ47HQAQJLk-2jbxld_7Yx4YeSTrJQ",
+            authDomain: "questionbank-8edee.firebaseapp.com",
+            projectId: "questionbank-8edee",
+            storageBucket: "questionbank-8edee.firebasestorage.app",
+            messagingSenderId: "916266107755",
+            appId: "1:916266107755:web:8697df896deb8479e6422e",
+            measurementId: "G-DRFYPLC7GX"
+        };
+        const app = firebase.initializeApp(firebaseConfig, "questionGameApp"); 
+        const db = firebase.firestore(app);
+        const auth = firebase.auth(app); 
+
+
+        // --- Game State Variables ---
+        let questions = [];        // Array of questions loaded from URL
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isAuthenticated = false; // Flag to track authentication status
+        
+        // --- Element References ---
+        const loadingState = document.getElementById('loading-state');
+        const quizView = document.getElementById('quiz-view');
+        const resultsView = document.getElementById('results-view');
+        const setTitle = document.getElementById('set-title');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
+        const currentScore = document.getElementById('current-score');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const drillStar = document.getElementById('drill-star');
+        
+        const finalResultText = document.getElementById('final-result-text');
+        const finalScoreText = document.getElementById('final-score-text');
+        
+        const backToBankBtn = document.getElementById('back-to-bank-btn');
+        const resultsBackBtn = document.getElementById('results-back-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // --- Core Functions ---
+        
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // 💥 MODIFIED: No longer async and doesn't call signInAnonymously 💥
+        function loadQuestions() {
+            loadingState.style.display = 'block';
+            
+            // 1. Retrieve the encoded question data
+            const encodedQData = getUrlParameter('qData');
+            
+            // Log the received encoded data to the console
+            console.log("--- RECEIVED ENCODED QUESTION PACKAGE ---");
+            console.log("Encoded Data (qData):", encodedQData);
+            console.log("-----------------------------------------");
+            
+            if (!encodedQData) {
+                setTitle.textContent = 'Error Loading Quiz';
+                loadingState.innerHTML = '<p style="color: red;">Question data not found in URL. Returning to Question Bank...</p>';
+                // Fallback action
+                setTimeout(() => window.location.href = 'question-bank.html', 3000);
+                return;
+            }
+
+            try {
+                // 2. Decode and parse the JSON string
+                questions = JSON.parse(encodedQData);
+                
+                // Log the parsed question package to the console
+                console.log("--- PARSED QUESTION PACKAGE ---");
+                console.log("Questions Array:", questions);
+                console.log("Total Questions:", questions.length);
+                console.log("-------------------------------");
+                
+                if (questions.length === 0) {
+                    setTitle.textContent = 'Error Loading Quiz';
+                    loadingState.innerHTML = '<p style="color: red;">Loaded data contains zero questions. Returning to Question Bank...</p>';
+                    setTimeout(() => window.location.href = 'question-bank.html', 3000);
+                    return;
+                }
+                
+                // 3. Initialization
+                // Use the name of the first question for the title
+                setTitle.textContent = questions[0].name || 'Question Game';
+                loadingState.style.display = 'none';
+                quizView.style.display = 'block';
+                
+                startQuiz();
+
+            } catch (e) {
+                console.error("Error parsing question data:", e);
+                setTitle.textContent = 'Data Error';
+                loadingState.innerHTML = '<p style="color: red;">Failed to parse question data. Returning to Question Bank...</p>';
+                setTimeout(() => window.location.href = 'question-bank.html', 3000);
+            }
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultsView.style.display = 'none';
+            quizView.style.display = 'block';
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const currentQ = questions[currentQuestionIndex];
+            
+            // Update UI elements
+            questionText.textContent = `Q${currentQuestionIndex + 1}: ${currentQ.text}`;
+            optionsContainer.innerHTML = '';
+            nextBtn.style.display = 'none';
+            
+            // Check and Sync Star UI State (based on drill field, which might be missing/undefined)
+            const isDrilled = currentQ.drill === 'true'; // Assuming drill field is passed, or defaults to false
+            if (isDrilled) {
+                 drillStar.classList.add('active');
+            } else {
+                 drillStar.classList.remove('active');
+            }
+            drillStar.setAttribute('data-drill', isDrilled ? 'true' : 'false');
+
+
+            currentQ.options.forEach((optionText, index) => {
+                const button = document.createElement('button');
+                button.classList.add('option-button');
+                button.textContent = optionText;
+                button.setAttribute('data-index', index);
+                button.addEventListener('click', handleAnswerSelection);
+                optionsContainer.appendChild(button);
+            });
+            
+            updateProgress();
+        }
+        
+        // MODIFIED FUNCTION: Toggle the star, log data, and update Firebase
+        async function handleStarToggle() {
+            // Check authentication status immediately
+            if (!isAuthenticated) {
+                console.error("❌ ERROR: User is not authenticated. Cannot save drill status.");
+                alert("You are not authorized to save the drill status. Please log in first.");
+                return;
+            }
+            
+            const currentQ = questions[currentQuestionIndex];
+            const isDrill = drillStar.getAttribute('data-drill') === 'true';
+            
+            // 1. Determine new state and toggle UI (optimistic update)
+            const newDrillStatus = isDrill ? "false" : "true";
+            const oldDrillStatus = isDrill ? "true" : "false"; // Store original for revert on error
+            
+            // Toggle UI immediately for better user experience
+            if (isDrill) {
+                drillStar.classList.remove('active');
+            } else {
+                drillStar.classList.add('active');
+            }
+            drillStar.setAttribute('data-drill', newDrillStatus);
+            
+            // 2. Prepare package for logging/update
+            const drillPackage = {
+                question_id: currentQ.question_id,
+                uploadFileName: currentQ.uploadFileName,
+                drill: newDrillStatus
+            };
+
+            console.log(`\n--- DRILL STATUS UPDATING FIREBASE: ${newDrillStatus.toUpperCase()} ---`);
+            console.log(drillPackage);
+            
+            // 3. FIREBASE UPDATE LOGIC
+            try {
+                // Find the specific question document in the 'questionBank' collection
+                const snapshot = await db.collection('questionBank')
+                    .where('uploadFileName', '==', drillPackage.uploadFileName)
+                    .where('question_id', '==', drillPackage.question_id)
+                    .limit(1)
+                    .get();
+
+                if (snapshot.empty) {
+                    console.error("❌ ERROR: Question document not found for update.", drillPackage);
+                     // Revert UI on database error (document not found)
+                    drillStar.setAttribute('data-drill', oldDrillStatus);
+                    if (oldDrillStatus === 'true') { drillStar.classList.add('active'); } else { drillStar.classList.remove('active'); }
+                    return;
+                }
+
+                // Get the reference to the single document found
+                const docRef = snapshot.docs[0].ref;
+
+                // Update the 'drill' field
+                await docRef.update({
+                    drill: newDrillStatus // Save the string "true" or "false"
+                });
+
+                console.log(`✅ SUCCESS: Question ID ${drillPackage.question_id} updated to drill:${newDrillStatus} in Firestore.`);
+
+            } catch (error) {
+                console.error("🔥 FATAL FIREBASE UPDATE ERROR:", error);
+                
+                // 4. Revert UI state on failure due to permissions or network error
+                drillStar.setAttribute('data-drill', oldDrillStatus);
+                if (oldDrillStatus === 'true') { drillStar.classList.add('active'); } else { drillStar.classList.remove('active'); }
+                
+                alert("An error occurred while saving the drill status. Check the console for Firebase permission details.");
+            }
+            console.log("------------------------------------------");
+        }
+
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.target;
+            const selectedIndex = parseInt(selectedButton.getAttribute('data-index'), 10);
+            const currentQ = questions[currentQuestionIndex];
+            
+            // Disable all option buttons
+            optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+                btn.disabled = true;
+            });
+            
+            // Check answer and update score/UI
+            const isCorrect = selectedIndex === currentQ.answer;
+
+            if (isCorrect) {
+                selectedButton.classList.add('correct');
+                score++;
+            } else {
+                selectedButton.classList.add('incorrect');
+                // Highlight the correct answer
+                const correctButton = optionsContainer.querySelector(`[data-index="${currentQ.answer}"]`);
+                if(correctButton) {
+                    correctButton.classList.add('correct');
+                }
+            }
+            
+            // Show the Next button
+            nextBtn.style.display = 'block';
+            updateScore();
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            progressBarFill.style.width = `${progress}%`;
+            updateScore(); // Update score display immediately for question 1/10
+        }
+        
+        function updateScore() {
+            // Display score out of total answered questions, or total questions if quiz is over
+            const answered = currentQuestionIndex;
+            const total = questions.length;
+            currentScore.textContent = `Score: ${score} / ${answered} (Total: ${total} Qs)`;
+        }
+
+        function showResults() {
+            quizView.style.display = 'none';
+            resultsView.style.display = 'block';
+            
+            progressBarFill.style.width = '100%'; // Ensure progress bar is full
+            
+            const total = questions.length;
+            const percentage = (score / total) * 100;
+            
+            finalScoreText.textContent = `You scored ${score} out of ${total} (${percentage.toFixed(0)}%).`;
+            
+            if (percentage >= 80) {
+                finalResultText.textContent = "Excellent!";
+            } else if (percentage >= 50) {
+                finalResultText.textContent = "Good Effort!";
+            } else {
+                finalResultText.textContent = "Keep Practicing!";
+            }
+        }
+        
+        // --- Event Listeners and Initialization ---
+        
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            displayQuestion();
+        });
+        
+        restartBtn.addEventListener('click', startQuiz);
+        
+        drillStar.addEventListener('click', handleStarToggle);
+        
+        // Navigation back to the bank (shared function for both buttons)
+        const goBackToBank = () => {
+             window.location.href = 'question-bank.html';
+        };
+
+        backToBankBtn.addEventListener('click', goBackToBank);
+        resultsBackBtn.addEventListener('click', goBackToBank);
+
+
+        // 💥 NEW: Use onAuthStateChanged to load content only after session is confirmed 💥
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                isAuthenticated = true;
+                console.log(`Authentication: User session found. User ID: ${user.uid}. Drill star feature enabled.`);
+            } else {
+                isAuthenticated = false;
+                console.log("Authentication: No active user session found. Drill star saving is disabled.");
+            }
+            
+            // Proceed to load content regardless of session, but star functionality relies on isAuthenticated
+            loadQuestions();
+        });
+        
+    </script>
+</body>
+</html>

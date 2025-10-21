@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Bank</title>
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <style>
+        /* Import a modern, clean font from Google Fonts (Roboto) */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;display=swap');
+        
+        /* Define colors */
+        :root {
+            --primary-color: #4285F4; /* Google Blue */
+            --background-light: #f7f9fc;
+            --card-background: #ffffff;
+            --text-color: #3c4043;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --secondary-color: #27ae60; /* Success Green */
+            --star-color: gold; /* New color for the star */
+        }
+
+        /* --- Custom Styles for the Bank Page (Unchanged) --- */
+        .login-container.app-container {
+            max-width: 1200px; /* Wider container for the bank layout on PC */
+            width: 95%; 
+        }
+
+        /* DEFAULT: Single-column stack for MOBILE first */
+        .main-content-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column for mobile */
+            gap: 20px; /* Adjusted gap for mobile */
+            margin-top: 30px;
+        }
+
+        .section-card {
+            background-color: var(--background-light);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header-bank {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            text-align: left;
+        }
+
+        /* Styling for the content areas */
+        .bank-content {
+            min-height: 150px; /* Ensure space for content, slightly smaller for mobile */
+            padding: 10px;
+            color: #555;
+            text-align: center;
+        }
+        
+        /* Detail View Styles */
+        .detail-header {
+            font-size: 2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .sub-section-header {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            color: var(--text-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            border: 4px solid #f3f3f3; 
+            border-top: 4px solid var(--primary-color); 
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Button styling for generated content */
+        .content-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: var(--primary-color); 
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .content-btn.book {
+            background-color: var(--secondary-color); /* Success Green for Book buttons */
+        }
+        
+        .content-btn.back-btn {
+            background-color: #ccc;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .content-btn:hover {
+             background-color: #357ae8;
+        }
+        .content-btn.book:hover {
+            background-color: #219d55;
+        }
+        .content-btn.back-btn:hover {
+            background-color: #bbb;
+        }
+        
+        /* --- DRILL BUTTON STYLES --- */
+        #drill-questions-btn {
+            background-color: var(--star-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 auto 20px auto; /* Centered, below title */
+            font-weight: 700;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        #drill-questions-btn:hover {
+            background-color: #ffd700; /* Slightly darker gold */
+        }
+        /* --- END DRILL BUTTON STYLES --- */
+
+
+        /* 🎯 MEDIA QUERY FOR PC/TABLET SCREENS (768px and up) 🎯 */
+        @media (min-width: 768px) {
+            .main-content-grid {
+                /* Switch to two columns for larger screens */
+                grid-template-columns: 1fr 1fr; 
+                gap: 30px;
+            }
+            .bank-content {
+                min-height: 200px; /* Restore taller height for PC */
+            }
+        }
+
+        /* --- NEW FLOATING BUTTON STYLES --- */
+        #settings-float-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color); /* Green for distinction */
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px; /* Pill shape */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            z-index: 1000; /* Ensure it stays above other content */
+            transition: background-color 0.2s;
+        }
+        #settings-float-btn:hover {
+            background-color: #219d55;
+        }
+        
+        /* --- NEW MODAL STYLES (Settings Panel) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001; 
+        }
+
+        .modal-content {
+            background: var(--card-background);
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-content h3 {
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        
+        /* Style for the setting options (reusing button styles) */
+        .setting-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .setting-options button {
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .setting-options button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .setting-options button:hover:not(.active) {
+            background-color: #e0e0e0;
+        }
+        
+        .modal-close-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+    </style>
+    
+</head>
+<body>
+
+    <div class="login-container" id="main-container"> 
+        
+        <h1>Question Bank</h1> 
+        
+        <button id="drill-questions-btn" class="hidden">
+            ★ Drill Questions
+        </button>
+        
+        <div id="loading-state">
+            <div class="loading"></div>
+            <p>Checking authentication...</p>
+        </div>
+
+        <div id="sign-in-state" class="hidden">
+            <p>You must sign in to access the question bank.</p>
+            <button id="google-login-btn">
+                Sign in with Google
+            </button> 
+            
+            <p id="error-message" style="color: red; margin-top: 15px;"></p>
+        </div>
+        
+        <div id="app-content" class="hidden">
+            <p style="text-align: right; font-size: 0.8rem; color: #555;">
+                Welcome, <span id="user-display-name">User</span>!
+            </p>
+            
+            <div id="bank-view">
+                <div class="main-content-grid">
+                    
+                    <div class="section-card">
+                        <h2 class="section-header-bank">Class Materials</h2>
+                        <div class="bank-content" id="class-materials-content">
+                            <p style="font-style: italic; font-size: 0.9em;">(Loading Class Sets...)</p>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <h2 class="section-header-bank">Book & Unit Materials</h2>
+                        <div class="bank-content" id="book-materials-content">
+                            <p style="font-style: italic; font-size: 0.9em;">(Loading Book Sets...)</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div id="class-detail-view" class="hidden">
+                <button id="back-to-bank-class" class="content-btn back-btn">← Back to Main Bank</button>
+                <h2 class="detail-header" id="class-detail-title"></h2>
+                
+                <h3 class="sub-section-header">Quiz & Test Material</h3>
+                <div id="quiz-test-section">
+                    <p style="font-style: italic;">Loading content...</p>
+                </div>
+
+                <h3 class="sub-section-header">Weekly Material</h3>
+                <div id="weekly-material-section">
+                    <p style="font-style: italic;">Loading content...</p>
+                </div>
+            </div>
+
+            <div id="book-unit-view" class="hidden">
+                <button id="back-to-bank-book" class="content-btn back-btn">← Back to Main Bank</button>
+                <h2 class="detail-header" id="book-unit-title"></h2>
+                
+                <h3 class="sub-section-header">Available Units</h3>
+                <div id="unit-buttons-section">
+                    <p style="font-style: italic;">Loading content...</p>
+                </div>
+            </div>
+
+            <button id="logout-btn" class="action-btn" style="background-color: #e74c3c; margin-top: 30px;">
+                Sign Out
+            </button>
+        </div>
+        
+        <button id="settings-float-btn" class="hidden">
+            Question Setting
+        </button>
+        
+        <div id="settings-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3>Question Settings</h3>
+                
+                <p>Select the number of questions for the next quiz/practice set:</p>
+                
+                <div class="setting-options" id="mc-setting-options">
+                    <button type="button" data-q-count="10" class="active">Practice 10 Questions</button>
+                    <button type="button" data-q-count="20">Practice 20 Questions</button>
+                    <button type="button" data-q-count="40">Maximum 40 Questions</button>
+                </div>
+                
+                <button id="modal-close-btn" class="modal-close-btn">
+                    Close
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    
+    <script src="main.js"></script> 
+
+<script>
+    // --- Global Data Store ---
+    let allQuestionSets = [];
+    let bookDataMap = {};
+    // Variable to track the user's preferred question count, default is 10
+    let currentQuestionCount = 10; 
+    // -------------------------
+    
+    // --- ELEMENT REFERENCES ---
+    const settingsFloatBtn = document.getElementById('settings-float-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const mcSettingOptions = document.getElementById('mc-setting-options');
+    const drillQuestionsBtn = document.getElementById('drill-questions-btn'); // NEW
+
+    // --- VIEW MANAGER FUNCTION (Unchanged) ---
+    function showView(viewId) {
+        document.getElementById('bank-view').classList.add('hidden');
+        document.getElementById('class-detail-view').classList.add('hidden');
+        document.getElementById('book-unit-view').classList.add('hidden');
+        
+        document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    // 💥 UPDATED ASYNC FUNCTION TO FETCH, PACKAGE, AND REDIRECT DRILL QUESTION DATA (FROM PREVIOUS STEP) 💥
+    async function loadDrillQuestions() {
+        if (typeof db === 'undefined') {
+            console.error("Firestore database object 'db' is not initialized.");
+            alert("Database not connected.");
+            return;
+        }
+
+        console.log(`\n--- STARTING DATABASE QUERY for Drill Questions (drill == "true") ---`);
+        drillQuestionsBtn.disabled = true; 
+        drillQuestionsBtn.textContent = 'Loading Drill Questions...';
+
+        try {
+            // 1. Query the 'questionBank' collection for documents where drill == "true"
+            const snapshot = await db.collection('questionBank')
+                                     .where('drill', '==', 'true')
+                                     .get();
+            
+            if (snapshot.empty) {
+                console.log(`❌ No questions found in 'questionBank' where drill = "true".`);
+                alert("No drill questions found in the database. Star some questions first!");
+                return;
+            }
+
+            const allQuestions = [];
+            // Package the data similar to the structure required by question_game.html
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                allQuestions.push({
+                    name: "Drill Practice Set", // Hardcode a name for the drill set
+                    text: data.text,            
+                    options: data.options,      
+                    answer: data.answer,         
+                    question_id: data.question_id,
+                    uploadFileName: data.uploadFileName,
+                    drill: data.drill || 'false' 
+                });
+            });
+
+            const totalQuestions = allQuestions.length;
+            const targetCount = currentQuestionCount;
+            const finalQuestionCount = Math.min(targetCount, totalQuestions);
+
+            console.log(`Found ${totalQuestions} total drill questions. Preparing to select ${finalQuestionCount} (Requested: ${targetCount}).`);
+
+            // 2. Randomly select the required number of questions
+            const selectedQuestions = [];
+            const availableIndices = Array.from({ length: totalQuestions }, (_, i) => i); 
+
+            for (let i = 0; i < finalQuestionCount; i++) {
+                const randomIndex = Math.floor(Math.random() * availableIndices.length);
+                const questionIndex = availableIndices.splice(randomIndex, 1)[0]; 
+                selectedQuestions.push(allQuestions[questionIndex]);
+            }
+
+            // 3. Package and Redirect
+            const questionPackageJson = JSON.stringify(selectedQuestions);
+            
+            console.log(`✅ ${selectedQuestions.length} Drill Questions Selected. Redirecting to question_game.html...`);
+            
+            // Redirect with the entire, encoded question data package
+            window.location.href = `question_game.html?qData=${encodeURIComponent(questionPackageJson)}`;
+
+        } catch (error) {
+            console.error("🔥 FATAL FIREBASE/PACKAGING ERROR:", error);
+            alert("An error occurred while preparing the drill set. Check the console for details.");
+        } finally {
+            drillQuestionsBtn.disabled = false;
+            drillQuestionsBtn.textContent = '★ Drill Questions';
+        }
+    }
+
+
+    // --- NEW ASYNC FUNCTION TO FETCH, SELECT, PACKAGE, AND REDIRECT QUESTION DATA (MODIFIED - Unchanged from previous step, shown for context) ---
+    async function fetchQuestionData(docId) {
+        if (typeof db === 'undefined') {
+            console.error("Firestore database object 'db' is not initialized.");
+            return;
+        }
+        
+        console.log(`\n--- STARTING DATABASE QUERY for docId: ${docId} ---`);
+        
+        try {
+            // 1. Fetch all questions for the document ID
+            const snapshot = await db.collection('questionBank')
+                                     .where('uploadFileName', '==', docId)
+                                     .get();
+            
+            if (snapshot.empty) {
+                console.log(`❌ No individual questions found in 'questionBank' with uploadFileName = ${docId}.`);
+                return;
+            }
+
+            const allQuestions = [];
+            // Retrieve only the necessary fields for the game package
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                allQuestions.push({
+                    name: data.questionSetName, // Map 'questionSetName' to 'name'
+                    text: data.text,            // Map 'text' to 'text' (question content)
+                    options: data.options,      // Map 'options' to 'options' (multiple choices)
+                    answer: data.answer,         // Map 'answer' to 'answer' (right answer index)
+                    question_id: data.question_id,
+                    uploadFileName: data.uploadFileName,
+                    // Include the drill status for the game
+                    drill: data.drill || 'false' 
+                });
+            });
+            
+            const totalQuestions = allQuestions.length;
+            const targetCount = currentQuestionCount;
+            const finalQuestionCount = Math.min(targetCount, totalQuestions);
+
+            console.log(`Found ${totalQuestions} total questions. Preparing to select ${finalQuestionCount} (Requested: ${targetCount}).`);
+
+            // 2. Randomly select the required number of questions
+            const selectedQuestions = [];
+            const availableIndices = Array.from({ length: totalQuestions }, (_, i) => i); 
+
+            for (let i = 0; i < finalQuestionCount; i++) {
+                const randomIndex = Math.floor(Math.random() * availableIndices.length);
+                const questionIndex = availableIndices.splice(randomIndex, 1)[0]; 
+                selectedQuestions.push(allQuestions[questionIndex]);
+            }
+
+
+            // 3. Package and Redirect
+            const questionPackageJson = JSON.stringify(selectedQuestions);
+            
+            // Log for inspection (optional, but good for debugging)
+            console.log(`✅ ${selectedQuestions.length} Questions Selected. Redirecting to question_game.html...`);
+            
+            // Redirect with the entire, encoded question data package
+            window.location.href = `question_game.html?qData=${encodeURIComponent(questionPackageJson)}`;
+            
+        } catch (error) {
+            console.error("🔥 FATAL FIREBASE/PACKAGING ERROR:", error);
+            alert("An error occurred while preparing the question set. Check the console for details.");
+        }
+    }
+
+    // --- MAIN DATA LOADER (Unchanged) ---
+    async function loadQuestionBankContent() {
+        if (typeof db === 'undefined') {
+            console.error("Firestore database object 'db' is not initialized.");
+            document.getElementById('class-materials-content').innerHTML = '<p style="color: red;">Database connection error.</p>';
+            document.getElementById('book-materials-content').innerHTML = '<p style="color: red;">Database connection error.</p>';
+            return;
+        }
+
+        const classContentDiv = document.getElementById('class-materials-content');
+        const bookContentDiv = document.getElementById('book-materials-content');
+
+        classContentDiv.innerHTML = '';
+        bookContentDiv.innerHTML = '';
+        
+        const uniqueClasses = new Set();
+        const uniqueBookNames = new Set();
+        allQuestionSets = [];
+        bookDataMap = {};
+
+        try {
+            const snapshot = await db.collection('questionSets')
+                                     .where('webStatus', '==', 'true')
+                                     .get();
+
+            if (snapshot.empty) {
+                classContentDiv.innerHTML = '<p>No Class sets have been generated for the web yet.</p>';
+                bookContentDiv.innerHTML = '<p>No Book sets have been been generated for the web yet.</p>';
+                return;
+            }
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                allQuestionSets.push(data); // Store all sets globally
+                
+                const type = data.type; 
+                let buttonName;
+                let uniqueSet;
+                let targetDiv;
+
+                if (type === 'Class') {
+                    buttonName = data.Class; 
+                    uniqueSet = uniqueClasses;
+                    targetDiv = classContentDiv;
+                    
+                } else if (type === 'Book') {
+                    buttonName = data.BookName;
+                    uniqueSet = uniqueBookNames;
+                    targetDiv = bookContentDiv;
+                    
+                    // Store BookName -> Unit mappings globally
+                    if (!bookDataMap[buttonName]) {
+                        bookDataMap[buttonName] = new Set();
+                    }
+                    bookDataMap[buttonName].add(data.Unit);
+                    
+                } else {
+                    return;
+                }
+                
+                // 3. CHECK FOR UNIQUENESS: Only proceed if the name hasn't been added yet
+                if (buttonName && !uniqueSet.has(buttonName)) {
+                    
+                    const button = document.createElement('button');
+                    button.classList.add('content-btn');
+                    button.textContent = buttonName;
+                    uniqueSet.add(buttonName);
+                    
+                    if (type === 'Class') {
+                        button.classList.add('class');
+                        button.addEventListener('click', () => showClassDetails(buttonName));
+                        
+                    } else if (type === 'Book') {
+                        button.classList.add('book');
+                        button.addEventListener('click', () => showBookUnits(buttonName));
+                    }
+                    
+                    targetDiv.appendChild(button);
+                }
+            });
+            
+            // 4. Display fallback message if sections are empty after processing
+            if (uniqueClasses.size === 0) {
+                 classContentDiv.innerHTML = '<p>No Class sets have been generated for the web yet.</p>';
+            }
+            if (uniqueBookNames.size === 0) {
+                 bookContentDiv.innerHTML = '<p>No Book sets have been generated for the web yet.</p>';
+            }
+
+        } catch (error) {
+            console.error("Error loading question bank content:", error);
+            classContentDiv.innerHTML = `<p style="color: red;">Failed to load class sets: ${error.message}</p>`;
+            bookContentDiv.innerHTML = `<p style="color: red;">Failed to load book sets: ${error.message}</p>`;
+        }
+    }
+
+    // --- CLASS DETAIL VIEW HANDLER (MODIFIED) ---
+    function showClassDetails(className) {
+        document.getElementById('class-detail-title').textContent = className;
+        
+        const quizTestSection = document.getElementById('quiz-test-section');
+        const weeklyMaterialSection = document.getElementById('weekly-material-section');
+        
+        quizTestSection.innerHTML = '';
+        weeklyMaterialSection.innerHTML = '';
+        
+        let quizTestCount = 0;
+        let weeklyCount = 0;
+
+        // Filter the globally stored sets
+        const classSets = allQuestionSets.filter(set => 
+            set.type === 'Class' && 
+            set.Class === className
+        );
+
+        classSets.forEach(data => {
+            const subType = data.subType; // 'Quiz & Test' or 'Weekly Material'
+            
+            const button = document.createElement('button');
+            button.classList.add('content-btn');
+            
+            // Button text: Use the specific name from the questionSetName field (e.g., Midterm Exam, Week 5)
+            const setDetails = data.questionSetName.split(' - ').slice(1).join(' - ');
+            button.textContent = setDetails || data.questionSetName; 
+            button.setAttribute('data-doc-id', data.uploadFileName); // Using uploadFileName as doc ID
+
+            button.addEventListener('click', () => {
+                const docId = data.uploadFileName;
+                
+                // Fetch, select, package, and redirect
+                fetchQuestionData(docId);
+            });
+
+            if (subType === 'Quiz & Test') {
+                quizTestSection.appendChild(button);
+                quizTestCount++;
+            } else if (subType === 'Weekly Material') {
+                weeklyMaterialSection.appendChild(button);
+                weeklyCount++;
+            }
+        });
+
+        if (quizTestCount === 0) {
+            quizTestSection.innerHTML = '<p style="font-style: italic;">No generated Quiz or Test sets found for this class.</p>';
+        }
+        if (weeklyCount === 0) {
+            weeklyMaterialSection.innerHTML = '<p style="font-style: italic;">No generated Weekly Material sets found for this class.</p>';
+        }
+
+        showView('class-detail-view');
+    }
+
+    // --- BOOK UNIT VIEW HANDLER (MODIFIED) ---
+    function showBookUnits(bookName) {
+        document.getElementById('book-unit-title').textContent = `Units for ${bookName}`;
+        const unitButtonsSection = document.getElementById('unit-buttons-section');
+        unitButtonsSection.innerHTML = '';
+
+        const units = bookDataMap[bookName] ? Array.from(bookDataMap[bookName]) : [];
+        const sortedUnits = units.sort(); // Sort units alphabetically/numerically
+
+        if (sortedUnits.length > 0) {
+            sortedUnits.forEach(unit => {
+                const unitButton = document.createElement('button');
+                unitButton.classList.add('content-btn');
+                unitButton.classList.add('book');
+                unitButton.textContent = unit;
+                
+                unitButton.addEventListener('click', () => {
+                    // Find the first set matching this book and unit to get its ID (using a representative ID)
+                    const unitSet = allQuestionSets.find(set => set.BookName === bookName && set.Unit === unit);
+                    const docId = unitSet ? unitSet.uploadFileName : `No_ID_Found_${bookName}_${unit}`;
+                    
+                    // Fetch, select, package, and redirect
+                    fetchQuestionData(docId);
+                });
+                
+                unitButtonsSection.appendChild(unitButton);
+            });
+        } else {
+            unitButtonsSection.innerHTML = '<p style="font-style: italic;">No units found for this book.</p>';
+        }
+
+        showView('book-unit-view');
+    }
+    
+    // --- MODAL AND SETTING LOGIC (Unchanged) ---
+    function handleQuestionCountSelection(event) {
+        const clickedButton = event.target.closest('button');
+        if (!clickedButton || !clickedButton.dataset.qCount) return;
+
+        // 1. Update the global state
+        currentQuestionCount = parseInt(clickedButton.dataset.qCount, 10);
+
+        // 2. Update the UI state within the modal
+        mcSettingOptions.querySelectorAll('button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        clickedButton.classList.add('active');
+
+        console.log(`Question count set to: ${currentQuestionCount} from floating settings.`);
+    }
+    
+    // Function to synchronize the modal UI with the current global setting
+    function syncModalUI() {
+        mcSettingOptions.querySelectorAll('button').forEach(btn => {
+            const count = parseInt(btn.dataset.qCount, 10);
+            if (count === currentQuestionCount) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    // --- EVENT LISTENERS & INITIALIZATION (Unchanged) ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const mainContainer = document.getElementById('main-container'); 
+        const appContent = document.getElementById('app-content');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // NEW: Add click listener for the drill button
+        drillQuestionsBtn.addEventListener('click', loadDrillQuestions);
+
+        // Back buttons functionality
+        document.getElementById('back-to-bank-class').addEventListener('click', () => {
+            showView('bank-view');
+        });
+        document.getElementById('back-to-bank-book').addEventListener('click', () => {
+            showView('bank-view');
+        });
+
+        // FLOATING BUTTON & MODAL LISTENERS 
+        
+        // Open Modal
+        settingsFloatBtn.addEventListener('click', () => {
+            syncModalUI(); 
+            settingsModal.classList.remove('hidden');
+        });
+        
+        // Close Modal
+        modalCloseBtn.addEventListener('click', () => {
+            settingsModal.classList.add('hidden');
+        });
+        
+        // Handle setting selection within the modal
+        mcSettingOptions.addEventListener('click', handleQuestionCountSelection);
+
+        // Function to handle the container width and visibility of the float button
+        const authCheck = () => {
+            if (!appContent.classList.contains('hidden')) {
+                mainContainer.classList.add('app-container'); 
+                loadQuestionBankContent(); 
+                showView('bank-view');
+                settingsFloatBtn.classList.remove('hidden'); 
+                drillQuestionsBtn.classList.remove('hidden'); // NEW: Show drill button
+            } else {
+                mainContainer.classList.remove('app-container');
+                settingsFloatBtn.classList.add('hidden');
+                drillQuestionsBtn.classList.add('hidden'); // NEW: Hide drill button
+            }
+        }
+        
+        // Observer watches the 'app-content' visibility (which main.js controls)
+        const observer = new MutationObserver((mutationsList, observer) => {
+            for(const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    authCheck();
+                }
+            }
+        });
+
+        observer.observe(appContent, { attributes: true });
+
+        // Initial check
+        authCheck();
+    });
+</script>
+</body>
+</html>
