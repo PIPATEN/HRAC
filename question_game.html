@@ -30,6 +30,52 @@
             box-shadow: 0 10px 25px var(--shadow-color);
         }
         
+        /* --- NEW ADMIN CONTROL STYLES --- */
+        #admin-control {
+            /* Hidden by default in HTML, shown via JS if isAdmin=true */
+            display: none; 
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px dashed #ccc;
+            border-radius: 6px;
+            background-color: #fff3e0; /* Light orange background to distinguish it */
+        }
+
+        #admin-control label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-right: 5px;
+        }
+
+        #new-answer-index-input {
+            width: 50px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--error-color);
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        #change-answer-btn {
+            background-color: var(--error-color);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        #change-answer-btn:hover {
+            background-color: #c0392b;
+        }
+        /* --- END ADMIN CONTROL STYLES --- */
+
+
         #question-area {
             min-height: 100px;
             margin-bottom: 25px;
@@ -150,6 +196,11 @@
         
         <h1 id="set-title">Quiz Game</h1>
         
+        <div id="admin-control" style="display: none;">
+            <label for="new-answer-index-input">Update Correct Answer (0-3):</label>
+            <input type="number" id="new-answer-index-input" min="0" max="3" placeholder="0-3" value="" disabled>
+            <button id="change-answer-btn" disabled>Change</button>
+        </div>
         <div id="loading-state">
             <p style="text-align: center;">Loading Question Data...</p>
         </div>
@@ -198,7 +249,7 @@
             appId: "1:916266107755:web:8697df896deb8479e6422e",
             measurementId: "G-DRFYPLC7GX"
         };
-        // FIX 1: Use the default app instance to pick up the existing Google session
+        // Use the default app instance to pick up the existing Google session
         const app = firebase.initializeApp(firebaseConfig); 
         const db = firebase.firestore(app);
         const auth = firebase.auth(app); 
@@ -208,8 +259,13 @@
         let questions = [];        // Array of questions loaded from Storage
         let currentQuestionIndex = 0;
         let score = 0;
-        let isAuthenticated = false; // Flag to track authentication status
+        let isAuthenticated = false; 
+        let currentUserID = null; 
+        let isAdmin = false; // ⬅️ FIX: Defined globally
         
+        // 💥 ADMIN CONFIGURATION: Your unique Firebase ID 💥
+        const ADMIN_UID = "sVwKTNtFV1VXWx5rmDZe5C3Zh0y1";
+
         // --- Element References ---
         const loadingState = document.getElementById('loading-state');
         const quizView = document.getElementById('quiz-view');
@@ -229,27 +285,25 @@
         const resultsBackBtn = document.getElementById('results-back-btn');
         const restartBtn = document.getElementById('restart-btn');
 
+        // Admin Control Elements
+        const newAnswerIndexInput = document.getElementById('new-answer-index-input');
+        const changeAnswerBtn = document.getElementById('change-answer-btn');
+        const adminControl = document.getElementById('admin-control'); // ⬅️ Element reference added
+        
         // --- Core Functions ---
         
-        // Removed: getUrlParameter function (no longer needed)
-
-        // FIX 2: Load questions from sessionStorage instead of the URL parameter
         function loadQuestions() {
             loadingState.style.display = 'block';
             
             // 1. Retrieve the question data from session storage
             const questionPackageJson = sessionStorage.getItem('gameQuestionData');
-            // Clear the storage immediately after reading it to prevent stale data
             sessionStorage.removeItem('gameQuestionData'); 
             
             console.log("--- RECEIVED QUESTION PACKAGE (from sessionStorage) ---");
-            console.log("JSON Data:", questionPackageJson ? questionPackageJson.substring(0, 100) + '...' : 'null');
-            console.log("-----------------------------------------");
             
             if (!questionPackageJson) {
                 setTitle.textContent = 'Error Loading Quiz';
                 loadingState.innerHTML = '<p style="color: red;">Question data not found. Please select a set from the Question Bank.</p>';
-                // Fallback action
                 setTimeout(() => window.location.href = 'question-bank.html', 3000);
                 return;
             }
@@ -258,11 +312,8 @@
                 // 2. Decode and parse the JSON string
                 questions = JSON.parse(questionPackageJson);
                 
-                // Log the parsed question package to the console
                 console.log("--- PARSED QUESTION PACKAGE ---");
-                console.log("Questions Array:", questions);
                 console.log("Total Questions:", questions.length);
-                console.log("-------------------------------");
                 
                 if (questions.length === 0) {
                     setTitle.textContent = 'Error Loading Quiz';
@@ -272,7 +323,6 @@
                 }
                 
                 // 3. Initialization
-                // Use the name of the first question for the title
                 setTitle.textContent = questions[0].name || 'Question Game';
                 loadingState.style.display = 'none';
                 quizView.style.display = 'block';
@@ -308,8 +358,8 @@
             optionsContainer.innerHTML = '';
             nextBtn.style.display = 'none';
             
-            // Check and Sync Star UI State (based on drill field, which might be missing/undefined)
-            const isDrilled = currentQ.drill === 'true'; // Assuming drill field is passed, or defaults to false
+            // Check and Sync Star UI State
+            const isDrilled = currentQ.drill === 'true'; 
             if (isDrilled) {
                  drillStar.classList.add('active');
             } else {
@@ -317,6 +367,12 @@
             }
             drillStar.setAttribute('data-drill', isDrilled ? 'true' : 'false');
 
+            // 💥 Admin Control UI: Always enabled for admin, empty value 💥
+            if (isAdmin) {
+                newAnswerIndexInput.value = ''; // Empty on load
+                newAnswerIndexInput.disabled = false; 
+                changeAnswerBtn.disabled = false; 
+            }
 
             currentQ.options.forEach((optionText, index) => {
                 const button = document.createElement('button');
@@ -330,11 +386,11 @@
             updateProgress();
         }
         
-        // MODIFIED FUNCTION: Toggle the star, log data, and update Firebase
+        // Function to handle the star toggle (unchanged)
         async function handleStarToggle() {
             // Check authentication status immediately
-            if (!isAuthenticated) {
-                console.error("❌ ERROR: User is not authenticated. Cannot save drill status.");
+            if (!isAuthenticated || !currentUserID) {
+                console.error("❌ ERROR: User is not authenticated. Cannot record drill status.");
                 alert("You are not authorized to save the drill status. Please log in first.");
                 return;
             }
@@ -344,7 +400,6 @@
             
             // 1. Determine new state and toggle UI (optimistic update)
             const newDrillStatus = isDrill ? "false" : "true";
-            const oldDrillStatus = isDrill ? "true" : "false"; // Store original for revert on error
             
             // Toggle UI immediately for better user experience
             if (isDrill) {
@@ -354,53 +409,104 @@
             }
             drillStar.setAttribute('data-drill', newDrillStatus);
             
-            // 2. Prepare package for logging/update
-            const drillPackage = {
+            // 2. Prepare package for logging and Firestore insertion
+            const recordPackage = {
+                userId: currentUserID,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 question_id: currentQ.question_id,
-                uploadFileName: currentQ.uploadFileName,
-                drill: newDrillStatus
+                uploadFileName: currentQ.uploadFileName, 
+                action: 'drill_star_toggle',
+                newDrillStatus: newDrillStatus,
+                questionText: currentQ.text.substring(0, 100) + '...'
             };
 
-            console.log(`\n--- DRILL STATUS UPDATING FIREBASE: ${newDrillStatus.toUpperCase()} ---`);
-            console.log(drillPackage);
+            console.log(`\n--- DRILL STATUS TOGGLE (Recording to userRecord) ---`);
             
-            // 3. FIREBASE UPDATE LOGIC
+            // 3. FIREBASE INSERT LOGIC
             try {
-                // Find the specific question document in the 'questionBank' collection
-                const snapshot = await db.collection('questionBank')
-                    .where('uploadFileName', '==', drillPackage.uploadFileName)
-                    .where('question_id', '==', drillPackage.question_id)
+                await db.collection('userRecord').add(recordPackage);
+                console.log(`✅ SUCCESS: Drill toggle recorded to 'userRecord' collection.`);
+            } catch (error) {
+                console.error("🔥 FATAL FIREBASE RECORDING ERROR:", error);
+                drillStar.setAttribute('data-drill', isDrill ? 'true' : 'false');
+                if (isDrill) { drillStar.classList.add('active'); } else { drillStar.classList.remove('active'); }
+                alert("An error occurred while recording the drill status log. Check console.");
+            }
+            console.log("-------------------------------------------------------");
+        }
+
+
+        // 💥 CORRECTED ASYNC FUNCTION TO UPDATE THE CORRECT ANSWER 💥
+        async function changeAnswer() {
+            
+            // 1. DEFINE VARIABLES FIRST (Ensuring scope is correct)
+            const currentQ = questions[currentQuestionIndex];
+            const newAnswerIndex = parseInt(newAnswerIndexInput.value, 10);
+            
+            // 2. Authorization Check (Uses global isAdmin)
+            if (!isAdmin) {
+                alert("Authorization failed. Only the designated admin can change the answer.");
+                return;
+            }
+
+            // 3. Basic Validation
+            if (isNaN(newAnswerIndex) || newAnswerIndex < 0 || newAnswerIndex > 3) {
+                alert("Invalid index. Please enter a number between 0 and 3.");
+                return;
+            }
+
+            // 4. CONFIRMATION STEP 
+            const isConfirmed = confirm(`Do you want to update the correct answer for Question ID ${currentQ.question_id} to index ${newAnswerIndex}? This change will be permanent in the database.`);
+
+            if (!isConfirmed) {
+                console.log("Answer update cancelled by user.");
+                return; // Stop the function if the user cancels
+            }
+            
+            // Disable controls during update
+            changeAnswerBtn.disabled = true;
+            newAnswerIndexInput.disabled = true; 
+            changeAnswerBtn.textContent = 'Updating...';
+
+            // 5. Find the Document in Firestore's 'questionBank' collection
+            try {
+                const questionBankRef = db.collection('questionBank');
+                
+                const snapshot = await questionBankRef
+                    .where('question_id', '==', currentQ.question_id)
+                    .where('uploadFileName', '==', currentQ.uploadFileName)
                     .limit(1)
                     .get();
 
                 if (snapshot.empty) {
-                    console.error("❌ ERROR: Question document not found for update.", drillPackage);
-                     // Revert UI on database error (document not found)
-                    drillStar.setAttribute('data-drill', oldDrillStatus);
-                    if (oldDrillStatus === 'true') { drillStar.classList.add('active'); } else { drillStar.classList.remove('active'); }
+                    alert("❌ Error: Could not find the corresponding question document in the database.");
+                    console.error("No document found for update:", currentQ);
                     return;
                 }
 
-                // Get the reference to the single document found
                 const docRef = snapshot.docs[0].ref;
+                const oldAnswer = currentQ.answer;
 
-                // Update the 'drill' field
+                // 6. Update the Answer Field
                 await docRef.update({
-                    drill: newDrillStatus // Save the string "true" or "false"
+                    answer: newAnswerIndex
                 });
 
-                console.log(`✅ SUCCESS: Question ID ${drillPackage.question_id} updated to drill:${newDrillStatus} in Firestore.`);
+                // 7. Update the client-side question object
+                currentQ.answer = newAnswerIndex; 
+                
+                // 8. Success Feedback
+                alert(`✅ SUCCESS! Answer for ${currentQ.question_id} updated from ${oldAnswer} to ${newAnswerIndex} in Firestore.`);
 
             } catch (error) {
                 console.error("🔥 FATAL FIREBASE UPDATE ERROR:", error);
-                
-                // 4. Revert UI state on failure due to permissions or network error
-                drillStar.setAttribute('data-drill', oldDrillStatus);
-                if (oldDrillStatus === 'true') { drillStar.classList.add('active'); } else { drillStar.classList.remove('active'); }
-                
-                alert("An error occurred while saving the drill status. Check the console for Firebase permission details.");
+                alert(`An error occurred while updating the answer: ${error.message}`);
+            } finally {
+                // Re-enable controls
+                changeAnswerBtn.disabled = false;
+                changeAnswerBtn.textContent = 'Change';
+                newAnswerIndexInput.disabled = false; 
             }
-            console.log("------------------------------------------");
         }
 
 
@@ -413,7 +519,7 @@
             optionsContainer.querySelectorAll('.option-button').forEach(btn => {
                 btn.disabled = true;
             });
-            
+
             // Check answer and update score/UI
             const isCorrect = selectedIndex === currentQ.answer;
 
@@ -429,6 +535,15 @@
                 }
             }
             
+            // Console Log all requested fields
+            console.log("--- ANSWER SELECTED ---");
+            console.log("Question ID:", currentQ.question_id); 
+            console.log("Source File:", currentQ.uploadFileName); 
+            console.log("Selected Answer Index (0-3):", selectedIndex);
+            console.log("Correct Answer Index (0-3):", currentQ.answer); 
+            console.log("Result:", isCorrect ? "CORRECT" : "INCORRECT");
+            console.log("-----------------------");
+            
             // Show the Next button
             nextBtn.style.display = 'block';
             updateScore();
@@ -437,11 +552,10 @@
         function updateProgress() {
             const progress = (currentQuestionIndex / questions.length) * 100;
             progressBarFill.style.width = `${progress}%`;
-            updateScore(); // Update score display immediately for question 1/10
+            updateScore(); 
         }
         
         function updateScore() {
-            // Display score out of total answered questions, or total questions if quiz is over
             const answered = currentQuestionIndex;
             const total = questions.length;
             currentScore.textContent = `Score: ${score} / ${answered} (Total: ${total} Qs)`;
@@ -451,7 +565,7 @@
             quizView.style.display = 'none';
             resultsView.style.display = 'block';
             
-            progressBarFill.style.width = '100%'; // Ensure progress bar is full
+            progressBarFill.style.width = '100%'; 
             
             const total = questions.length;
             const percentage = (score / total) * 100;
@@ -475,9 +589,11 @@
         });
         
         restartBtn.addEventListener('click', startQuiz);
-        
         drillStar.addEventListener('click', handleStarToggle);
         
+        // Event listener for the Change Answer button
+        changeAnswerBtn.addEventListener('click', changeAnswer);
+
         // Navigation back to the bank (shared function for both buttons)
         const goBackToBank = () => {
              window.location.href = 'question-bank.html';
@@ -487,17 +603,29 @@
         resultsBackBtn.addEventListener('click', goBackToBank);
 
 
-        // Use onAuthStateChanged to load content only after session is confirmed
+        // CORE AUTHENTICATION CHECK
         auth.onAuthStateChanged(user => {
             if (user) {
                 isAuthenticated = true;
-                console.log(`Authentication: User session found. User ID: ${user.uid}. Drill star feature enabled.`);
+                currentUserID = user.uid;
+                
+                // ⬅️ FIX: Set the global isAdmin flag
+                isAdmin = (user.uid === ADMIN_UID);
+                
+                console.log(`Authentication: User session found. User ID: ${user.uid}. Admin check: ${isAdmin}`);
             } else {
                 isAuthenticated = false;
-                console.log("Authentication: No active user session found. Drill star saving is disabled.");
+                currentUserID = null;
+                isAdmin = false;
+                console.log("Authentication: No active user session found.");
             }
             
-            // Proceed to load content regardless of session, but star functionality relies on isAuthenticated
+            // ⬅️ FIX: Control Admin UI Visibility
+            if (adminControl) {
+                // Set display to 'flex' (from CSS) or 'none'
+                adminControl.style.display = isAdmin ? 'flex' : 'none'; 
+            }
+
             loadQuestions();
         });
         
